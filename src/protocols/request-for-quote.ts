@@ -71,22 +71,20 @@ const start = function (config: any) {
             senderAmount = req.body.params.senderAmount
             signerAmount = calculateCostFromLevels(
               toDecimalString(senderAmount, senderDecimals),
-              config.levels[i].levels
+              config.levels[i].bid
             )
             signerAmount = toAtomicString(signerAmount, signerDecimals)
           } else {
             signerAmount = req.body.params.signerAmount
             senderAmount = calculateCostFromLevels(
               toDecimalString(signerAmount, signerDecimals),
-              config.levels[i].levels
+              config.levels[i].ask
             )
             senderAmount = toAtomicString(senderAmount, senderDecimals)
           }
         }
       }
     }
-
-    console.info(`Received request: ${JSON.stringify(req.body)}`)
 
     if (!found) {
       res.statusCode = 200
@@ -120,6 +118,11 @@ const start = function (config: any) {
         lightDeploys[config.chainId],
         config.chainId
       )
+
+      console.log('Making...', {
+        ...order,
+        ...signature,
+      })
 
       res.statusCode = 200
       res.json({
