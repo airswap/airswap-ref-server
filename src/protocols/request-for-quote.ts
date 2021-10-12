@@ -12,8 +12,6 @@ import bodyParser from 'body-parser'
 import Cors from 'cors'
 import { decimals } from '../utils'
 
-const lightDeploys = require('@airswap/light/deploys.js')
-
 const start = function (config: any) {
   function initMiddleware(middleware: any) {
     return (req: any, res: any) =>
@@ -55,7 +53,7 @@ const start = function (config: any) {
   config.app.post('*', async (req: any, res: any) => {
     await cors(req, res)
 
-    let { signerToken, senderWallet, senderToken } = req.body.params
+    let { signerToken, senderWallet, senderToken, swapContract } = req.body.params
     let signerAmount
     let senderAmount
 
@@ -115,7 +113,7 @@ const start = function (config: any) {
       const signature = await createLightSignature(
         order,
         `0x${process.env.PRIVATE_KEY}`,
-        lightDeploys[config.chainId],
+        swapContract,
         config.chainId
       )
 
