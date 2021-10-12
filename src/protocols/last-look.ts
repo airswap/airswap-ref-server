@@ -16,7 +16,7 @@ const start = function (config: any) {
       subscribers[idx].send(JSON.stringify({
         jsonrpc: '2.0',
         method: 'updatePricing',
-        params: config.levels,
+        params: [config.levels],
       }))
     }
   }, 1000)
@@ -34,16 +34,26 @@ const start = function (config: any) {
         case 'subscribe':
         case 'subscribeAll':
           subscribers.push(ws)
+          ws.send(JSON.stringify({
+            jsonrpc: '2.0',
+            id: json.id,
+            result: [config.levels]
+          }))
           break
         case 'unsubscribe':
         case 'unsubscribeAll':
           removeSubscriber(ws)
+          ws.send(JSON.stringify({
+            jsonrpc: '2.0',
+            id: json.id,
+            result: true
+          }))
           break
         case 'consider':
           ws.send(JSON.stringify({
             jsonrpc: '2.0',
             id: json.id,
-            result: 'true'
+            result: true
           }))
           console.log('Taking...', json.params)
           break
