@@ -1,6 +1,4 @@
-#!/usr/bin/env ts-node-script
 
-'use strict'
 import dotenv from 'dotenv'
 import * as ethers from 'ethers'
 import express from 'express'

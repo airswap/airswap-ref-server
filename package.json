@@ -2,12 +2,18 @@
   "name": "airswap-toy-maker",
   "version": "0.1.0",
   "private": true,
+  "main": "index.js",
+  "engines": {
+    "node" : "14.x"
+  },
   "scripts": {
-    "start": "ts-node server.ts"
+    "build": "rm -rf ./api && tsc -p .",
+    "start": "ts-node src/index.ts",
+    "deploy": "yarn build && vercel --prod"
   },
   "dependencies": {
-    "@airswap/light": "2.2.2",
-    "@airswap/utils": "0.4.5",
+    "@airswap/light": "2.3.1 ",
+    "@airswap/utils": "0.4.10",
     "bignumber.js": "^9.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -24,6 +30,7 @@
     "eslint": "7.32.0",
     "prettier": "^2.3.2",
     "ts-node": "^10.2.0",
-    "typescript": "^4.3.5"
+    "tsc": "^2.0.3",
+    "typescript": "^4.4.3"
   }
 }

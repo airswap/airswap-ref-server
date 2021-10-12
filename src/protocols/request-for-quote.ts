@@ -6,10 +6,11 @@ import {
   createLightOrder,
   createLightSignature,
   toAtomicString,
+  calculateCostFromLevels,
 } from '@airswap/utils'
 import bodyParser from 'body-parser'
 import Cors from 'cors'
-import { calculateAmountFromLevels, decimals } from '../utils'
+import { decimals } from '../utils'
 
 const lightDeploys = require('@airswap/light/deploys.js')
 
@@ -40,9 +41,15 @@ const start = function (config: any) {
       JSON.stringify({
         wallet: config.wallet.address,
         chainId: process.env.CHAIN_ID,
-        pricing: process.env.PRICING,
+        pricing: config.levels,
       })
     )
+  })
+
+  config.app.options('*', async (req: any, res: any) => {
+    await cors(req, res)
+    res.statusCode = 200
+    res.end()
   })
 
   config.app.post('*', async (req: any, res: any) => {
@@ -54,23 +61,24 @@ const start = function (config: any) {
 
     const senderDecimals: any = decimals[senderToken]
     const signerDecimals: any = decimals[signerToken]
+    let found = false
 
     for (const i in config.levels) {
-      if (config.levels[i].baseToken.toLowerCase() === senderToken) {
-        if (config.levels[i].quoteToken.toLowerCase() === signerToken) {
+      if (config.levels[i].baseToken.toLowerCase() === senderToken.toLowerCase()) {
+        if (config.levels[i].quoteToken.toLowerCase() === signerToken.toLowerCase()) {
+          found = true
           if (req.body.method === 'getSignerSideOrder') {
             senderAmount = req.body.params.senderAmount
-            signerAmount = calculateAmountFromLevels(
+            signerAmount = calculateCostFromLevels(
               toDecimalString(senderAmount, senderDecimals),
               config.levels[i].levels
             )
             signerAmount = toAtomicString(signerAmount, signerDecimals)
           } else {
             signerAmount = req.body.params.signerAmount
-            senderAmount = calculateAmountFromLevels(
+            senderAmount = calculateCostFromLevels(
               toDecimalString(signerAmount, signerDecimals),
-              config.levels[i].levels,
-              true
+              config.levels[i].levels
             )
             senderAmount = toAtomicString(senderAmount, senderDecimals)
           }
@@ -80,36 +88,49 @@ const start = function (config: any) {
 
     console.info(`Received request: ${JSON.stringify(req.body)}`)
 
-    const order = createLightOrder({
-      nonce: String(Date.now()),
-      expiry: String(
-        Math.floor(Date.now() / 1000) + Number(process.env.EXPIRY)
-      ),
-      signerFee: String(process.env.SIGNER_FEE),
-      signerWallet: config.wallet.address,
-      signerToken,
-      signerAmount,
-      senderWallet,
-      senderToken,
-      senderAmount,
-    })
+    if (!found) {
+      res.statusCode = 200
+      res.json({
+        jsonrpc: '2.0',
+        id: req.body.id,
+        error: {
+          code: -33601,
+          message: 'Not serving pair'
+        },
+      })
+    } else {
 
-    const signature = await createLightSignature(
-      order,
-      `0x${process.env.PRIVATE_KEY}`,
-      lightDeploys[config.chainId],
-      config.chainId
-    )
+      const order = createLightOrder({
+        nonce: String(Date.now()),
+        expiry: String(
+          Math.floor(Date.now() / 1000) + Number(process.env.EXPIRY)
+        ),
+        signerFee: String(process.env.SIGNER_FEE),
+        signerWallet: config.wallet.address,
+        signerToken,
+        signerAmount,
+        senderWallet,
+        senderToken,
+        senderAmount,
+      })
 
-    res.statusCode = 200
-    res.json({
-      jsonrpc: '2.0',
-      id: req.body.id,
-      result: {
-        ...order,
-        ...signature,
-      },
-    })
+      const signature = await createLightSignature(
+        order,
+        `0x${process.env.PRIVATE_KEY}`,
+        lightDeploys[config.chainId],
+        config.chainId
+      )
+
+      res.statusCode = 200
+      res.json({
+        jsonrpc: '2.0',
+        id: req.body.id,
+        result: {
+          ...order,
+          ...signature,
+        },
+      })
+    }
   })
 }
 
