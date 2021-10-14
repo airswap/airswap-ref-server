@@ -4,12 +4,12 @@
   "private": true,
   "main": "index.js",
   "engines": {
-    "node" : "14.x"
+    "node": "14.x"
   },
   "scripts": {
     "build": "rm -rf ./api && tsc -p .",
-    "start": "ts-node src/index.ts",
-    "deploy": "yarn build && vercel --prod"
+    "dev": "ts-node src/index.ts",
+    "start": "yarn build && node api/index.js"
   },
   "dependencies": {
     "@airswap/light": "2.3.1 ",
@@ -20,12 +20,12 @@
     "dotenv": "^10.0.0",
     "ethers": "^5.4.4",
     "express": "^4.17.1",
-    "mathjs": "^9.4.4",
     "ws": "^8.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
+    "@types/node": "^16.10.9",
     "@types/ws": "^7.4.7",
     "eslint": "7.32.0",
     "prettier": "^2.3.2",
