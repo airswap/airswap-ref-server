@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rm -rf ./api && tsc -p .",
     "dev": "ts-node src/index.ts",
-    "start": "yarn build && node api/index.js"
+    "start": "node api/index.js"
   },
   "dependencies": {
     "@airswap/light": "2.3.1 ",
