@@ -14,6 +14,7 @@
   "dependencies": {
     "@airswap/light": "2.3.1 ",
     "@airswap/utils": "0.4.10",
+    "axios": "^0.23.0",
     "bignumber.js": "^9.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
