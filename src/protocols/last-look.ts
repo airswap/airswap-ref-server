@@ -23,14 +23,14 @@ const start = function (config: any) {
       subscribers[idx].send(JSON.stringify({
         jsonrpc: '2.0',
         method: 'updatePricing',
-        params: [config.levels],
+        params: [config.levels.LLLevels],
       }))
     }
   }, 1000)
 
   wss.on('connection', (ws: any) => {
     ws.on('message', (message: any) => {
-      let json
+      let json: any
       try {
         json = JSON.parse(message)
       } catch (e) {
@@ -44,7 +44,7 @@ const start = function (config: any) {
           ws.send(JSON.stringify({
             jsonrpc: '2.0',
             id: json.id,
-            result: [config.levels]
+            result: [config.LLLevels]
           }))
           break
         case 'unsubscribe':
@@ -57,21 +57,26 @@ const start = function (config: any) {
           }))
           break
         case 'consider':
-          ws.send(JSON.stringify({
-            jsonrpc: '2.0',
-            id: json.id,
-            result: true
-          }))
           console.log('Taking...', json.params)
           new ethers.Contract(lightDeploys[config.chainId], Light.abi, config.wallet)
             .swap(...lightOrderToParams(json.params), { gasPrice: GAS_PRICE })
             .then((tx: any) => {
+              ws.send(JSON.stringify({
+                jsonrpc: '2.0',
+                id: json.id,
+                result: true
+              }))
               console.log('Submitted...', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
               tx.wait(CONFIRMATIONS).then(() => {
                 console.log('Mined ✨', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
               })
             })
             .catch((error: any) => {
+              ws.send(JSON.stringify({
+                jsonrpc: '2.0',
+                id: json.id,
+                result: false
+              }))
               console.log(error.reason || error.responseText || error)
             })
           break

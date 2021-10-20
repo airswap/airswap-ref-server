@@ -39,7 +39,7 @@ const start = function (config: any) {
       JSON.stringify({
         wallet: config.wallet.address,
         chainId: process.env.CHAIN_ID,
-        pricing: config.levels,
+        pricing: config.levels.RFQLevels,
       })
     )
   })
@@ -61,22 +61,22 @@ const start = function (config: any) {
     const signerDecimals: any = decimals[signerToken]
     let found = false
 
-    for (const i in config.levels) {
-      if (config.levels[i].baseToken.toLowerCase() === senderToken.toLowerCase()) {
-        if (config.levels[i].quoteToken.toLowerCase() === signerToken.toLowerCase()) {
+    for (const i in config.levels.RFQLevels) {
+      if (config.levels.RFQLevels[i].baseToken.toLowerCase() === senderToken.toLowerCase()) {
+        if (config.levels.RFQLevels[i].quoteToken.toLowerCase() === signerToken.toLowerCase()) {
           found = true
           if (req.body.method === 'getSignerSideOrder') {
             senderAmount = req.body.params.senderAmount
             signerAmount = calculateCostFromLevels(
               toDecimalString(senderAmount, senderDecimals),
-              config.levels[i].bid
+              config.levels.RFQLevels[i].bid
             )
             signerAmount = toAtomicString(signerAmount, signerDecimals)
           } else {
             signerAmount = req.body.params.signerAmount
             senderAmount = calculateCostFromLevels(
               toDecimalString(signerAmount, signerDecimals),
-              config.levels[i].ask
+              config.levels.RFQLevels[i].ask
             )
             senderAmount = toAtomicString(senderAmount, senderDecimals)
           }

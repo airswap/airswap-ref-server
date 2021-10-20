@@ -6,7 +6,7 @@ import { createServer } from 'http'
 
 import LastLook from './protocols/last-look'
 import RFQ from './protocols/request-for-quote'
-import levels from './levels'
+import { RFQLevels, LLLevels } from './levels'
 import { getProvider } from './utils'
 
 dotenv.config()
@@ -20,7 +20,10 @@ async function start () {
   const config = {
     app,
     server,
-    levels,
+    levels: {
+      RFQLevels,
+      LLLevels
+    },
     wallet,
     chainId,
   }
