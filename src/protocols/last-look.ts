@@ -28,7 +28,7 @@ const start = function (config: any) {
     }
   }, 1000)
 
-  wss.on('connection', (ws: any) => {
+  wss.on('connection', (ws: any, req: any) => {
     ws.on('message', (message: any) => {
       let json: any
       try {
@@ -72,12 +72,13 @@ const start = function (config: any) {
               })
             })
             .catch((error: any) => {
+              console.log(error)
               ws.send(JSON.stringify({
                 jsonrpc: '2.0',
                 id: json.id,
-                result: false
+                error: error.message
               }))
-              console.log(error.reason || error.responseText || error)
+              console.log(error.message)
             })
           break
       }
@@ -97,6 +98,7 @@ const start = function (config: any) {
         },
       }]]
     }))
+    console.log('Connection', req.socket.remoteAddress)
   })
 }
 
