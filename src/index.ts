@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv'
 import * as ethers from 'ethers'
 import express from 'express'
@@ -26,6 +25,8 @@ async function start () {
     },
     wallet,
     chainId,
+    gasPrice: `${process.env.GAS_PRICE || 20}000000000`,
+    confirmations: String(process.env.CONFIRMATIONS || '2')
   }
 
   console.log(`Loaded account`, wallet.address)

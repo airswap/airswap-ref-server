@@ -3,11 +3,9 @@ import { ethers } from 'ethers'
 import { lightOrderToParams } from '@airswap/utils'
 import { etherscanDomains } from '@airswap/constants'
 
+
 const Light = require('@airswap/light/build/contracts/Light.sol/Light.json')
 const lightDeploys = require('@airswap/light/deploys.js')
-
-const GAS_PRICE = '20000000000'
-const CONFIRMATIONS = '2'
 
 const start = function (config: any) {
   const wss = new WebSocket.Server({ server: config.server })
@@ -57,9 +55,9 @@ const start = function (config: any) {
           }))
           break
         case 'consider':
-          console.log('Taking...', json.params)
+          console.log('Taking...', `(gas price ${config.gasPrice})`, json.params)
           new ethers.Contract(lightDeploys[config.chainId], Light.abi, config.wallet)
-            .swap(...lightOrderToParams(json.params), { gasPrice: GAS_PRICE })
+            .swap(...lightOrderToParams(json.params), { gasPrice: config.gasPrice })
             .then((tx: any) => {
               ws.send(JSON.stringify({
                 jsonrpc: '2.0',
@@ -67,7 +65,7 @@ const start = function (config: any) {
                 result: true
               }))
               console.log('Submitted...', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
-              tx.wait(CONFIRMATIONS).then(() => {
+              tx.wait(config.confirmations).then(() => {
                 console.log('Mined ✨', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
               })
             })
