@@ -12,7 +12,7 @@
     "start": "node api/index.js"
   },
   "dependencies": {
-    "@airswap/swap": "2.4.0",
+    "@airswap/swap": "2.5.0",
     "@airswap/utils": "1.0.0",
     "axios": "^0.23.0",
     "bignumber.js": "^9.0.1",

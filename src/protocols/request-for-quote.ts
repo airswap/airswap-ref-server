@@ -53,7 +53,8 @@ const start = function (config: any) {
   config.app.post('*', async (req: any, res: any) => {
     await cors(req, res)
 
-    let { signerToken, senderWallet, senderToken, swapContract } = req.body.params
+    let { signerToken, senderWallet, senderToken, swapContract } =
+      req.body.params
     let signerAmount
     let senderAmount
 
@@ -62,8 +63,14 @@ const start = function (config: any) {
     let found = false
 
     for (const i in config.levels.RFQLevels) {
-      if (config.levels.RFQLevels[i].baseToken.toLowerCase() === senderToken.toLowerCase()) {
-        if (config.levels.RFQLevels[i].quoteToken.toLowerCase() === signerToken.toLowerCase()) {
+      if (
+        config.levels.RFQLevels[i].baseToken.toLowerCase() ===
+        senderToken.toLowerCase()
+      ) {
+        if (
+          config.levels.RFQLevels[i].quoteToken.toLowerCase() ===
+          signerToken.toLowerCase()
+        ) {
           found = true
           if (req.body.method === 'getSignerSideOrder') {
             senderAmount = req.body.params.senderAmount
@@ -91,17 +98,16 @@ const start = function (config: any) {
         id: req.body.id,
         error: {
           code: -33601,
-          message: 'Not serving pair'
+          message: 'Not serving pair',
         },
       })
     } else {
-
       const order = createOrder({
         nonce: String(Date.now()),
         expiry: String(
           Math.floor(Date.now() / 1000) + Number(process.env.EXPIRY)
         ),
-        signerFee: String(process.env.SIGNER_FEE),
+        protocolFee: String(process.env.PROTOCOL_FEE),
         signerWallet: config.wallet.address,
         signerToken,
         signerAmount,

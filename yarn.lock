@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@airswap/constants/-/constants-1.0.0.tgz#e16c6fff7aa2fda8635452762bd35451a0a8ffac"
   integrity sha512-HFmLbz8TQsiuJcF8TtKt9Q0o52RzSdt6B0n9BS089ybTBwojg/AgWGGA8Jx18y3I5E62jC6X6myJuUsmCIvHYA==
 
-"@airswap/swap@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@airswap/swap/-/swap-2.4.0.tgz#5fe2e113eb907e2ad64f940292327d2145b67faa"
-  integrity sha512-6E3aGuxo9T/Im040mWUmLVqZkLbJuPcKMMTnb1u21QgUjluL10myA6+USZ8nxIF/47awAASQgTu8yii7IdJuSA==
+"@airswap/swap@2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@airswap/swap/-/swap-2.5.0.tgz#a76ac0866bf49c45b7daf8992cdf1262ea07b80d"
+  integrity sha512-xNsIpMP4gabT5AznSyGzh83pC2FQPWdqvdFyW/g+FxyMzecQYHlBfxMJsXU14Ist7RNeGroWHoPBOGInmr9liA==
   dependencies:
     "@openzeppelin/contracts" "^4.3.1"
 
