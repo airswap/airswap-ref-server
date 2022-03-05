@@ -2,33 +2,33 @@
 # yarn lockfile v1
 
 
-"@airswap/constants@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@airswap/constants/-/constants-1.0.0.tgz#e16c6fff7aa2fda8635452762bd35451a0a8ffac"
-  integrity sha512-HFmLbz8TQsiuJcF8TtKt9Q0o52RzSdt6B0n9BS089ybTBwojg/AgWGGA8Jx18y3I5E62jC6X6myJuUsmCIvHYA==
+"@airswap/constants@3.0.0-beta.0":
+  version "3.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@airswap/constants/-/constants-3.0.0-beta.0.tgz#9eaa49f6c1cc001a1e2d7be16118497b6ac1e0c1"
+  integrity sha512-gG+/Yg5d/BBV7hhLa3QRRDkQePWyW7huPwmWlnpyqSNIBfje8RB1SQgwxnNmPM3YzaXWKiLQo166zVBs3UG4aw==
 
-"@airswap/swap@3.0.0-beta":
-  version "3.0.0-beta"
-  resolved "https://registry.yarnpkg.com/@airswap/swap/-/swap-3.0.0-beta.tgz#258ff12a3b8c42a89669f9b4035c1ae4703ecab1"
-  integrity sha512-vVQiIxhIaTJ7+UZyGn5ClyAC+ulTFuShJ8FYeagHX9saoV4IrlHLWh0x+DhJzliFHF3YBGV2jaRypgLX4KMiyA==
+"@airswap/swap@3.0.0-beta.3":
+  version "3.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@airswap/swap/-/swap-3.0.0-beta.3.tgz#3c8c1a604c9c4de5ac944d869a51eb4ab6120c2b"
+  integrity sha512-9GdKI+Y/NxWLFY/I0PWy+Ra3n8hV9jgyDrcOvjnisgQAdoWNRVNKQJmT+Xs8tgOStjomGzUn+1LohwUZI1y88w==
   dependencies:
     "@openzeppelin/contracts" "^4.3.1"
 
-"@airswap/typescript@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@airswap/typescript/-/typescript-1.0.1.tgz#4b9de505a23371a10ee21f0c5881fa586509cead"
-  integrity sha512-9neKyO0kWw3CKXYhT/xTZK63ExtCL9uMVFKxEHomL04yz7Wwdc9vvjpZKPNKqahitge3NK89+U19yb9cNynicw==
+"@airswap/typescript@3.0.0-beta.0":
+  version "3.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@airswap/typescript/-/typescript-3.0.0-beta.0.tgz#c6753909ea9961c99e4ebebb0dac4ad62a8dde1b"
+  integrity sha512-0l52T/Fny5yaqxlljLhwBKEnqkuDDpHE4dAZXbqiknrfnLdg5a9S+Am5v6FDNWJIPmt/bcxjN2HKdGdI7EPfAQ==
   dependencies:
-    "@airswap/constants" "1.0.0"
+    "@airswap/constants" "3.0.0-beta.0"
     "@uniswap/token-lists" "^1.0.0-beta.26"
 
-"@airswap/utils@^1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@airswap/utils/-/utils-1.0.1.tgz#c815624f18bb2722ec07ed71e2c0cbfcfbff4fd8"
-  integrity sha512-i98LzTGl4aEW9auX26GQP0msU3Q+0SsW2coUMeo+77iwUUZinIPJkKM8VOmAS0s8DSbl7SjgP4m4SpOxNgz4EQ==
+"@airswap/utils@3.0.0-beta.0":
+  version "3.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@airswap/utils/-/utils-3.0.0-beta.0.tgz#6a4a839e4b6b2a111d238efd94991e36679e5341"
+  integrity sha512-gpRQN11LytDSSjc6qCGw55iJO1Tr1335MrYd/l7PCezg3AqprDQV+dzjVKSXB0VoLtmVK+UX78dzCms43n2Fqg==
   dependencies:
-    "@airswap/constants" "1.0.0"
-    "@airswap/typescript" "1.0.1"
+    "@airswap/constants" "3.0.0-beta.0"
+    "@airswap/typescript" "3.0.0-beta.0"
     "@types/ethereumjs-util" "^6.1.0"
     bignumber.js "^9.0.1"
     eth-sig-util "^3.0.0"
