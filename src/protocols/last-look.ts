@@ -1,11 +1,11 @@
 import WebSocket from 'ws'
 import { ethers } from 'ethers'
-import { lightOrderToParams } from '@airswap/utils'
+import { orderToParams } from '@airswap/utils'
 import { etherscanDomains } from '@airswap/constants'
 
 
-const Light = require('@airswap/light/build/contracts/Light.sol/Light.json')
-const lightDeploys = require('@airswap/light/deploys.js')
+const Swap = require('@airswap/swap/build/contracts/Swap.sol/Swap.json')
+const swapDeploys = require('@airswap/swap/deploys.js')
 
 const start = function (config: any) {
   const wss = new WebSocket.Server({ server: config.server })
@@ -56,8 +56,8 @@ const start = function (config: any) {
           break
         case 'consider':
           console.log('Taking...', `(gas price ${config.gasPrice})`, json.params)
-          new ethers.Contract(lightDeploys[config.chainId], Light.abi, config.wallet)
-            .swap(...lightOrderToParams(json.params), { gasPrice: config.gasPrice })
+          new ethers.Contract(swapDeploys[config.chainId], Swap.abi, config.wallet)
+            .swap(...orderToParams(json.params), { gasPrice: config.gasPrice })
             .then((tx: any) => {
               ws.send(JSON.stringify({
                 jsonrpc: '2.0',
@@ -92,7 +92,7 @@ const start = function (config: any) {
         version: '1.0.0',
         params: {
           senderWallet: config.wallet.address,
-          swapContract: lightDeploys[config.chainId],
+          swapContract: swapDeploys[config.chainId],
         },
       }]]
     }))
