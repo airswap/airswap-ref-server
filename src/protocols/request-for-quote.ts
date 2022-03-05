@@ -101,7 +101,7 @@ const start = function (config: any) {
         expiry: String(
           Math.floor(Date.now() / 1000) + Number(process.env.EXPIRY)
         ),
-        signerFee: String(process.env.SIGNER_FEE),
+        protocolFee: String(process.env.PROTOCOL_FEE),
         signerWallet: config.wallet.address,
         signerToken,
         signerAmount,
