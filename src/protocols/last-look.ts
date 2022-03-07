@@ -57,7 +57,7 @@ const start = function (config: any) {
         case 'consider':
           console.log('Taking...', `(gas price ${config.gasPrice})`, json.params)
           new ethers.Contract(swapDeploys[config.chainId], Swap.abi, config.wallet)
-            .swap(...orderToParams(json.params), { gasPrice: config.gasPrice })
+            .light(...orderToParams(json.params), { gasPrice: config.gasPrice })
             .then((tx: any) => {
               ws.send(JSON.stringify({
                 jsonrpc: '2.0',
