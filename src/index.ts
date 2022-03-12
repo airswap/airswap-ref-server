@@ -7,6 +7,7 @@ import LastLook from './protocols/last-look'
 import RFQ from './protocols/request-for-quote'
 import { RFQLevels, LLLevels } from './levels'
 import { getProvider } from './utils'
+import { chainNames } from '@airswap/constants'
 
 dotenv.config()
 
@@ -20,8 +21,8 @@ async function start () {
     app,
     server,
     levels: {
-      RFQLevels,
-      LLLevels
+      RFQLevels: (RFQLevels as any)[chainId],
+      LLLevels: (LLLevels as any)[chainId]
     },
     wallet,
     chainId,
@@ -30,6 +31,7 @@ async function start () {
   }
 
   console.log(`Loaded account`, wallet.address)
+  console.log(`Serving for ${chainNames[chainId]}`)
 
   LastLook(config)
   console.log(`Last-look protocol started`)

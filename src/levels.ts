@@ -1,33 +1,69 @@
-export const LLLevels = [
-  {
-    baseToken: '0xc778417e063141139fce010982780140aa0cd5ab',
-    quoteToken: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-    minimum: '0.005',
-    bid: [['1000', '1']],
-    ask: [['1000', '1']]
-  },
-  {
-    baseToken: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-    quoteToken: '0xc778417e063141139fce010982780140aa0cd5ab',
-    minimum: '0.005',
-    bid: [['1000', '0.9']],
-    ask: [['1000', '1.1']]
-  },
-]
+export const LLLevels = {
+  '4': [
+    {
+      baseToken: '0xc778417e063141139fce010982780140aa0cd5ab',
+      quoteToken: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
+      minimum: '0.005',
+      bid: [['1000', '1']],
+      ask: [['1000', '1']]
+    },
+    {
+      baseToken: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
+      quoteToken: '0xc778417e063141139fce010982780140aa0cd5ab',
+      minimum: '0.005',
+      bid: [['1000', '0.9']],
+      ask: [['1000', '1.1']]
+    },
+  ],
+  '1': [
+    {
+      baseToken: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      minimum: '0.005',
+      bid: [['1000', '1']],
+      ask: [['1000', '1']]
+    },
+    {
+      baseToken: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      quoteToken: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      minimum: '0.005',
+      bid: [['1000', '0.9']],
+      ask: [['1000', '1.1']]
+    }
+  ]
+}
 
-export const RFQLevels = [
-  {
-    baseToken: '0xc778417e063141139fce010982780140aa0cd5ab',
-    quoteToken: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-    minimum: '0.005',
-    bid: [['1000', '0.9']],
-    ask: [['1000', '1.1']]
-  },
-  {
-    baseToken: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-    quoteToken: '0xc778417e063141139fce010982780140aa0cd5ab',
-    minimum: '0.005',
-    bid: [['1000', '1']],
-    ask: [['1000', '1']]
-  },
-]
+export const RFQLevels = {
+  '4': [
+    {
+      baseToken: '0xc778417e063141139fce010982780140aa0cd5ab',
+      quoteToken: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
+      minimum: '0.005',
+      bid: [['1000', '0.9']],
+      ask: [['1000', '1.1']]
+    },
+    {
+      baseToken: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
+      quoteToken: '0xc778417e063141139fce010982780140aa0cd5ab',
+      minimum: '0.005',
+      bid: [['1000', '1']],
+      ask: [['1000', '1']]
+    },
+  ],
+  '1': [
+    {
+      baseToken: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      minimum: '0.005',
+      bid: [['1000', '0.9']],
+      ask: [['1000', '1.1']]
+    },
+    {
+      baseToken: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      quoteToken: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      minimum: '0.005',
+      bid: [['1000', '1']],
+      ask: [['1000', '1']]
+    }
+  ]
+}

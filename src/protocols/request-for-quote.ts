@@ -38,7 +38,7 @@ const start = function (config: any) {
     res.send(
       JSON.stringify({
         wallet: config.wallet.address,
-        chainId: process.env.CHAIN_ID,
+        chainId: config.chainId,
         pricing: config.levels.RFQLevels,
       })
     )
