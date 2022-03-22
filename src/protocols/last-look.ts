@@ -42,7 +42,7 @@ const start = function (config: any) {
           ws.send(JSON.stringify({
             jsonrpc: '2.0',
             id: json.id,
-            result: [config.LLLevels]
+            result: config.levels.LLLevels
           }))
           break
         case 'unsubscribe':
