@@ -36,8 +36,8 @@ export const LLLevels = {
       baseToken: '0xd9d01a9f7c810ec035c0e42cb9e80ef44d7f8692',
       quoteToken: '0x48c427e7cEf42399e9e8300fC47875772309e995',
       minimum: '0.005',
-      bid: [['1000', '1']],
-      ask: [['1000', '1']]
+      bid: [['1000', '1.1']],
+      ask: [['1000', '0.9']]
     },
     {
       baseToken: '0x48c427e7cEf42399e9e8300fC47875772309e995',
