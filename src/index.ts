@@ -6,15 +6,18 @@ import { createServer } from 'http'
 import LastLook from './protocols/last-look'
 import RFQ from './protocols/request-for-quote'
 import { RFQLevels, LLLevels } from './levels'
-import { getProvider } from './utils'
+import { getNodeURL } from './utils'
 import { chainNames } from '@airswap/constants'
 
 dotenv.config()
 
 async function start () {
   const port = parseInt(String(process.env.PORT), 10) || 3000
-  const wallet = new ethers.Wallet(String(process.env.PRIVATE_KEY), await getProvider(String(process.env.INFURA_API_KEY)))
   const chainId = Number(process.env.CHAIN_ID)
+  const provider = new ethers.providers.JsonRpcProvider(getNodeURL(chainId, String(process.env.INFURA_API_KEY)))
+  await provider.getNetwork()
+
+  const wallet = new ethers.Wallet(String(process.env.PRIVATE_KEY), provider)
   const app = express()
   const server = createServer(app)
   const config = {
