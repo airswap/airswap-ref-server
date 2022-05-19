@@ -2,10 +2,12 @@ import WebSocket from 'ws'
 import { ethers } from 'ethers'
 import { orderToParams } from '@airswap/utils'
 import { etherscanDomains } from '@airswap/constants'
+import { Swap } from "@airswap/libraries";
 
-
-const Swap = require('@airswap/swap/build/contracts/Swap.sol/Swap.json')
-const swapDeploys = require('@airswap/swap/deploys.js')
+import * as SwapContract from '@airswap/swap/build/contracts/Swap.sol/Swap.json'
+// TODO: type defs for this.
+// @ts-ignore
+import * as swapDeploys from '@airswap/swap/deploys.js'
 
 const start = function (config: any) {
   const wss = new WebSocket.Server({ server: config.server })
@@ -27,7 +29,7 @@ const start = function (config: any) {
   }, 1000)
 
   wss.on('connection', (ws: any, req: any) => {
-    ws.on('message', (message: any) => {
+    ws.on('message', async (message: any) => {
       let json: any
       try {
         json = JSON.parse(message)
@@ -55,29 +57,43 @@ const start = function (config: any) {
           }))
           break
         case 'consider':
-          console.log('Taking...', `(gas price ${config.gasPrice})`, json.params)
-          new ethers.Contract(swapDeploys[config.chainId], Swap.abi, config.wallet)
-            .light(...orderToParams(json.params), { gasPrice: config.gasPrice })
-            .then((tx: any) => {
-              ws.send(JSON.stringify({
-                jsonrpc: '2.0',
-                id: json.id,
-                result: true
-              }))
-              console.log('Submitted...', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
-              tx.wait(config.confirmations).then(() => {
-                console.log('Mined ✨', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
+          console.log('Checking...', json.params)
+          const errors = (await new Swap(config.chainId).check(
+            json.params,
+            config.wallet.address,
+            config.wallet
+          ))
+          if (!errors.length) {
+            console.log('No errors; taking...', `(gas price ${config.gasPrice})`)
+            new ethers.Contract(swapDeploys[config.chainId], SwapContract.abi, config.wallet)
+              .light(...orderToParams(json.params), { gasPrice: config.gasPrice })
+              .then((tx: any) => {
+                ws.send(JSON.stringify({
+                  jsonrpc: '2.0',
+                  id: json.id,
+                  result: true
+                }))
+                console.log('Submitted...', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
+                tx.wait(config.confirmations).then(() => {
+                  console.log('Mined ✨', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
+                })
               })
-            })
-            .catch((error: any) => {
-              console.log(error)
-              ws.send(JSON.stringify({
-                jsonrpc: '2.0',
-                id: json.id,
-                error: error.message
-              }))
-              console.log(error.message)
-            })
+              .catch((error: any) => {
+                ws.send(JSON.stringify({
+                  jsonrpc: '2.0',
+                  id: json.id,
+                  error: error.message
+                }))
+                console.log(error.message)
+              })
+          } else {
+            ws.send(JSON.stringify({
+              jsonrpc: '2.0',
+              id: json.id,
+              error: errors
+            }))
+            console.log('Errors taking...', errors)
+          }
           break
       }
     })
