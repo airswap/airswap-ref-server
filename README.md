@@ -1,7 +1,6 @@
 # AirSwap Demo Maker
 
-Runs RFQ and Last Look protocol servers for AirSwap.
-Connect and debug using the AirSwap CLI: `yarn global add airswap`
+Reference RFQ and Last Look protocol server for AirSwap.
 
 **Install packages**
 
