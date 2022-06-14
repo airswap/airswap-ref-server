@@ -8,7 +8,7 @@ Reference RFQ and Last Look protocol server for AirSwap.
 $ yarn
 ```
 
-**Run on Rinkeby**
+**Quick start on Rinkeby**
 
 Copy `.env.example` to `.env` and update values:
 
