@@ -57,8 +57,8 @@ const start = function (config: any) {
     let signerAmount
     let senderAmount
 
-    const senderDecimals: any = decimals[senderToken]
-    const signerDecimals: any = decimals[signerToken]
+    const senderDecimals: any = decimals[senderToken.toLowerCase()]
+    const signerDecimals: any = decimals[signerToken.toLowerCase()]
     let found = false
 
     for (const i in config.levels.RFQLevels) {

@@ -2,8 +2,8 @@ import { ethers } from 'ethers'
 import { chainNames } from '@airswap/constants'
 
 export const decimals: any = {
-  '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea': 18,
-  '0xc778417e063141139fce010982780140aa0cd5ab': 18,
+  '0x07865c6e87b9f70255377e024ace6630c1eaa37f': 6,
+  '0x79c950c7446b234a6ad53b908fbf342b01c4d446': 6,
 }
 
 export function getNodeURL(chainId: number, INFURA_ID: string) {
