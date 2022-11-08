@@ -18,13 +18,13 @@ export const LLLevels = {
   '5': [
     {
       baseToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-      quoteToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      quoteToken: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
       minimum: '0.005',
       bid: [['1000', '1']],
       ask: [['1000', '1']]
     },
     {
-      baseToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      baseToken: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
       quoteToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
       minimum: '0.005',
       bid: [['1000', '0.9']],
@@ -69,13 +69,13 @@ export const RFQLevels = {
   '5': [
     {
       baseToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-      quoteToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      quoteToken: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
       minimum: '0.005',
       bid: [['1000', '0.9']],
       ask: [['1000', '1.1']]
     },
     {
-      baseToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      baseToken: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
       quoteToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
       minimum: '0.005',
       bid: [['1000', '1']],
