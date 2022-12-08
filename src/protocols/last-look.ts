@@ -1,13 +1,13 @@
 import WebSocket from 'ws'
 import { ethers } from 'ethers'
-import { orderToParams } from '@airswap/utils'
+import { orderERC20ToParams } from '@airswap/utils'
 import { etherscanDomains } from '@airswap/constants'
-import { Swap } from "@airswap/libraries";
+import { SwapERC20 } from "@airswap/libraries";
 
-import * as SwapContract from '@airswap/swap/build/contracts/Swap.sol/Swap.json'
+import * as SwapContract from '@airswap/swap-erc20/build/contracts/SwapERC20.sol/SwapERC20.json'
 // TODO: type defs for this.
 // @ts-ignore
-import * as swapDeploys from '@airswap/swap/deploys.js'
+import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 
 const start = function (config: any) {
   const wss = new WebSocket.Server({ server: config.server })
@@ -58,15 +58,16 @@ const start = function (config: any) {
           break
         case 'consider':
           console.log('Checking...', json.params)
-          const errors = (await new Swap(config.chainId).check(
+          const errors = (await new SwapERC20(config.chainId).check(
             json.params,
             config.wallet.address,
             config.wallet
           ))
           if (!errors.length) {
-            console.log('No errors; taking...', `(gas price ${config.gasPrice})`)
+            const gasPrice = await config.wallet.getGasPrice()
+            console.log('No errors; taking...', `(gas price ${gasPrice / 10**9})`)
             new ethers.Contract(swapDeploys[config.chainId], SwapContract.abi, config.wallet)
-              .light(...orderToParams(json.params), { gasPrice: config.gasPrice })
+              .swapLight(...orderERC20ToParams(json.params), { gasPrice: config.gasPrice })
               .then((tx: any) => {
                 ws.send(JSON.stringify({
                   jsonrpc: '2.0',

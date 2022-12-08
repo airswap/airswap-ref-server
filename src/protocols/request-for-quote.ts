@@ -3,8 +3,8 @@
 'use strict'
 import {
   toDecimalString,
-  createOrder,
-  createSwapSignature,
+  createOrderERC20,
+  createOrderERC20Signature,
   toAtomicString,
   calculateCostFromLevels,
 } from '@airswap/utils'
@@ -96,7 +96,7 @@ const start = function (config: any) {
       })
     } else {
 
-      const order = createOrder({
+      const order = createOrderERC20({
         nonce: String(Date.now()),
         expiry: String(
           Math.floor(Date.now() / 1000) + Number(process.env.EXPIRY)
@@ -110,7 +110,7 @@ const start = function (config: any) {
         senderAmount,
       })
 
-      const signature = await createSwapSignature(
+      const signature = await createOrderERC20Signature(
         order,
         `0x${process.env.PRIVATE_KEY}`,
         swapContract,
