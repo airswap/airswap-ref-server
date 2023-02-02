@@ -30,6 +30,34 @@ export const LLLevels = {
       bid: [['1000', '0.9']],
       ask: [['1000', '1.1']]
     },
+    {
+      baseToken: '0x208f73527727bcb2d9ca9ba047e3979559eb08cc',
+      quoteToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      minimum: '0.005',
+      bid: [['1000', '1']],
+      ask: [['1000', '1']]
+    },
+    {
+      baseToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      quoteToken: '0x208f73527727bcb2d9ca9ba047e3979559eb08cc',
+      minimum: '0.005',
+      bid: [['1000', '0.9']],
+      ask: [['1000', '1.1']]
+    },
+    {
+      baseToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+      quoteToken: '0x208f73527727bcb2d9ca9ba047e3979559eb08cc',
+      minimum: '0.005',
+      bid: [['1000', '1']],
+      ask: [['1000', '1']]
+    },
+    {
+      baseToken: '0x208f73527727bcb2d9ca9ba047e3979559eb08cc',
+      quoteToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+      minimum: '0.005',
+      bid: [['1000', '0.9']],
+      ask: [['1000', '1.1']]
+    },
   ],
   '43113': [
     {
@@ -76,6 +104,34 @@ export const RFQLevels = {
     },
     {
       baseToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      quoteToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+      minimum: '0.005',
+      bid: [['1000', '1']],
+      ask: [['1000', '1']]
+    },
+    {
+      baseToken: '0x208f73527727bcb2d9ca9ba047e3979559eb08cc',
+      quoteToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      minimum: '0.005',
+      bid: [['1000', '0.9']],
+      ask: [['1000', '1.1']]
+    },
+    {
+      baseToken: '0x79c950c7446b234a6ad53b908fbf342b01c4d446',
+      quoteToken: '0x208f73527727bcb2d9ca9ba047e3979559eb08cc',
+      minimum: '0.005',
+      bid: [['1000', '1']],
+      ask: [['1000', '1']]
+    },
+    {
+      baseToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+      quoteToken: '0x208f73527727bcb2d9ca9ba047e3979559eb08cc',
+      minimum: '0.005',
+      bid: [['1000', '0.9']],
+      ask: [['1000', '1.1']]
+    },
+    {
+      baseToken: '0x208f73527727bcb2d9ca9ba047e3979559eb08cc',
       quoteToken: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
       minimum: '0.005',
       bid: [['1000', '1']],
