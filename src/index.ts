@@ -9,6 +9,9 @@ import { RFQLevels, LLLevels } from './levels'
 import { getNodeURL } from './utils'
 import { chainNames } from '@airswap/constants'
 
+// @ts-ignore
+import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
+
 dotenv.config()
 
 async function start () {
@@ -29,12 +32,11 @@ async function start () {
     },
     wallet,
     chainId,
-    gasPrice: `${process.env.GAS_PRICE || 20}000000000`,
     confirmations: String(process.env.CONFIRMATIONS || '2')
   }
 
-  console.log(`Loaded account`, wallet.address)
-  console.log(`Serving for ${chainNames[chainId]}`)
+  console.log(`Loaded signer`, wallet.address)
+  console.log(`Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]})`)
 
   LastLook(config)
   console.log(`Last-look protocol started`)
