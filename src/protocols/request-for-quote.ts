@@ -53,6 +53,16 @@ const start = function (config: any) {
   config.app.post('*', async (req: any, res: any) => {
     await cors(req, res)
 
+    if (req.body.method === 'getPricingERC20') {
+      res.statusCode = 200
+      res.json({
+        jsonrpc: '2.0',
+        id: req.body.id,
+        result: config.levels.RFQLevels,
+      })
+      return
+    }
+
     let { signerToken, senderWallet, senderToken, swapContract } = req.body.params
     let signerAmount
     let senderAmount
@@ -65,7 +75,7 @@ const start = function (config: any) {
       if (config.levels.RFQLevels[i].baseToken.toLowerCase() === senderToken.toLowerCase()) {
         if (config.levels.RFQLevels[i].quoteToken.toLowerCase() === signerToken.toLowerCase()) {
           found = true
-          if (req.body.method === 'getSignerSideOrder') {
+          if (req.body.method === 'getSignerSideOrderERC20') {
             senderAmount = req.body.params.senderAmount
             signerAmount = calculateCostFromLevels(
               toDecimalString(senderAmount, senderDecimals),

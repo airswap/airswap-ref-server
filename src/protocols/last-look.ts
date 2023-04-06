@@ -22,7 +22,7 @@ const start = function (config: any) {
     for (let idx in subscribers) {
       subscribers[idx].send(JSON.stringify({
         jsonrpc: '2.0',
-        method: 'updatePricing',
+        method: 'setPricingERC20',
         params: [config.levels.LLLevels],
       }))
     }
@@ -38,8 +38,8 @@ const start = function (config: any) {
         return
       }
       switch (json.method) {
-        case 'subscribe':
-        case 'subscribeAll':
+        case 'subscribePricingERC20':
+        case 'subscribeAllPricingERC20':
           subscribers.push(ws)
           ws.send(JSON.stringify({
             jsonrpc: '2.0',
@@ -47,8 +47,8 @@ const start = function (config: any) {
             result: config.levels.LLLevels
           }))
           break
-        case 'unsubscribe':
-        case 'unsubscribeAll':
+        case 'unsubscribePricingERC20':
+        case 'unsubscribeAllPricingERC20':
           removeSubscriber(ws)
           ws.send(JSON.stringify({
             jsonrpc: '2.0',
@@ -56,7 +56,7 @@ const start = function (config: any) {
             result: true
           }))
           break
-        case 'consider':
+        case 'considerOrderERC20':
           console.log('Checking...', json.params)
           const errors = (await new SwapERC20(config.chainId).check(
             json.params,
@@ -103,7 +103,7 @@ const start = function (config: any) {
     })
     ws.send(JSON.stringify({
       jsonrpc: '2.0',
-      method: 'initialize',
+      method: 'setSupportedProtocols',
       params: [[{
         name: 'last-look',
         version: '1.0.0',

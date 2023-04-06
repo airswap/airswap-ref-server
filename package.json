@@ -1,10 +1,10 @@
 {
-  "name": "airswap-toy-maker",
-  "version": "0.1.0",
+  "name": "airswap-maker",
+  "version": "4.0.0",
   "private": true,
   "main": "index.js",
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "scripts": {
     "build": "rm -rf ./api && tsc -p .",
