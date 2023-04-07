@@ -103,9 +103,9 @@ const start = function (config: any) {
     })
     ws.send(JSON.stringify({
       jsonrpc: '2.0',
-      method: 'setSupportedProtocols',
+      method: 'setProtocols',
       params: [[{
-        name: 'last-look',
+        name: 'last-look-erc20',
         version: '1.0.0',
         params: {
           senderWallet: config.wallet.address,
