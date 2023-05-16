@@ -1,11 +1,10 @@
 import WebSocket from 'ws'
 import { ethers } from 'ethers'
-import { orderERC20ToParams } from '@airswap/utils'
-import { etherscanDomains } from '@airswap/constants'
+import { checkResultToErrors, orderERC20ToParams } from '@airswap/utils'
+import { Protocols, explorerUrls } from '@airswap/constants'
 import { SwapERC20 } from "@airswap/libraries";
 
 import * as SwapContract from '@airswap/swap-erc20/build/contracts/SwapERC20.sol/SwapERC20.json'
-// TODO: type defs for this.
 // @ts-ignore
 import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 
@@ -58,25 +57,24 @@ const start = function (config: any) {
           break
         case 'considerOrderERC20':
           console.log('Checking...', json.params)
-          const errors = (await new SwapERC20(config.chainId).check(
-            json.params,
+          const [errCount, errors] = await (SwapERC20.getContract(config.wallet.provider, config.chainId).check(
             config.wallet.address,
-            config.wallet
+            ...orderERC20ToParams(json.params)
           ))
-          if (!errors.length) {
+          if (errCount.isZero()) {
             const gasPrice = await config.wallet.getGasPrice()
             console.log('No errors; taking...', `(gas price ${gasPrice / 10**9})`)
             new ethers.Contract(swapDeploys[config.chainId], SwapContract.abi, config.wallet)
-              .swapLight(...orderERC20ToParams(json.params), { gasPrice: config.gasPrice })
+              .swapLight(...orderERC20ToParams(json.params), { gasPrice })
               .then((tx: any) => {
                 ws.send(JSON.stringify({
                   jsonrpc: '2.0',
                   id: json.id,
                   result: true
                 }))
-                console.log('Submitted...', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
+                console.log('Submitted...', `${explorerUrls[tx.chainId]}/tx/${tx.hash}`)
                 tx.wait(config.confirmations).then(() => {
-                  console.log('Mined ✨', `https://${etherscanDomains[tx.chainId]}/tx/${tx.hash}`)
+                  console.log('Mined ✨', `${explorerUrls[tx.chainId]}/tx/${tx.hash}`)
                 })
               })
               .catch((error: any) => {
@@ -93,7 +91,7 @@ const start = function (config: any) {
               id: json.id,
               error: errors
             }))
-            console.log('Errors taking...', errors)
+            console.log('Errors...', checkResultToErrors(errCount, errors))
           }
           break
       }
@@ -105,7 +103,7 @@ const start = function (config: any) {
       jsonrpc: '2.0',
       method: 'setProtocols',
       params: [[{
-        name: 'last-look-erc20',
+        name: Protocols.LastLookERC20,
         version: '1.0.0',
         params: {
           senderWallet: config.wallet.address,
