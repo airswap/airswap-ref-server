@@ -174,14 +174,14 @@ export const RFQLevels = {
     {
       baseToken: '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
       quoteToken: '0x1990BC6dfe2ef605Bfc08f5A23564dB75642Ad73',
-      minimum: '0.005',
+      minimum: '1',
       bid: [['100', '1']],
       ask: [['100', '1']]
     },
     {
       baseToken: '0x1990BC6dfe2ef605Bfc08f5A23564dB75642Ad73',
       quoteToken: '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
-      minimum: '0.005',
+      minimum: '1',
       bid: [['100', '1']],
       ask: [['100', '1']]
     },
