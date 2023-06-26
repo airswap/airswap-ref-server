@@ -7,7 +7,7 @@ import LastLook from './protocols/last-look'
 import RFQ from './protocols/request-for-quote'
 import { RFQLevels, LLLevels } from './levels'
 import { getNodeURL } from './utils'
-import { chainNames } from '@airswap/constants'
+import { chainNames, ChainIds } from '@airswap/constants'
 
 // @ts-ignore
 import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
@@ -38,8 +38,10 @@ async function start () {
   console.log(`Loaded signer`, wallet.address)
   console.log(`Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]})`)
 
-  // LastLook(config)
-  // console.log(`Last-look protocol started`)
+  if (chainId !== ChainIds.LINEAGOERLI) {
+    LastLook(config)
+    console.log(`Last-look protocol started`)
+  }
 
   RFQ(config)
   console.log(`Request-for-quote started`)

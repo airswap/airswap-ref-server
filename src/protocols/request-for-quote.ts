@@ -11,6 +11,7 @@ import {
 import bodyParser from 'body-parser'
 import Cors from 'cors'
 import { decimals } from '../utils'
+import { ChainIds } from '@airswap/constants'
 
 const start = function (config: any) {
   function initMiddleware(middleware: any) {
@@ -63,6 +64,19 @@ const start = function (config: any) {
       return
     }
 
+    if (Number(req.body.params.chainId) !== config.chainId) {
+      res.statusCode = 200
+      res.json({
+        jsonrpc: '2.0',
+        id: req.body.id,
+        error: {
+          code: -33601,
+          message: 'Not serving chain'
+        },
+      })
+      return
+    }
+
     let { signerToken, senderWallet, senderToken, swapContract } = req.body.params
     let signerAmount
     let senderAmount
@@ -77,18 +91,52 @@ const start = function (config: any) {
           found = true
           if (req.body.method === 'getSignerSideOrderERC20') {
             senderAmount = req.body.params.senderAmount
-            signerAmount = calculateCostFromLevels(
-              toDecimalString(senderAmount, senderDecimals),
-              config.levels.RFQLevels[i].bid
-            )
-            signerAmount = toAtomicString('100', signerDecimals)
+            try {
+              signerAmount = calculateCostFromLevels(
+                toDecimalString(senderAmount, senderDecimals),
+                config.levels.RFQLevels[i].bid
+              )
+            } catch (e: any) {
+              if (Number(req.body.params.chainId) === ChainIds.LINEAGOERLI) {
+                signerAmount = '100'
+              } else {
+                res.statusCode = 200
+                res.json({
+                  jsonrpc: '2.0',
+                  id: req.body.id,
+                  error: {
+                    code: -33601,
+                    message: e.message
+                  },
+                })
+                return
+              }
+            }
+            signerAmount = toAtomicString(signerAmount, signerDecimals)
           } else {
             signerAmount = req.body.params.signerAmount
-            senderAmount = calculateCostFromLevels(
-              toDecimalString(signerAmount, signerDecimals),
-              config.levels.RFQLevels[i].ask
-            )
-            senderAmount = toAtomicString('100', senderDecimals)
+            try {
+              senderAmount = calculateCostFromLevels(
+                toDecimalString(signerAmount, signerDecimals),
+                config.levels.RFQLevels[i].ask
+              )
+            } catch (e: any) {
+              if (Number(req.body.params.chainId) === ChainIds.LINEAGOERLI) {
+                senderAmount = '100'
+              } else {
+                res.statusCode = 200
+                res.json({
+                  jsonrpc: '2.0',
+                  id: req.body.id,
+                  error: {
+                    code: -33601,
+                    message: e.message
+                  },
+                })
+                return
+              }
+            }
+            senderAmount = toAtomicString(senderAmount, senderDecimals)
           }
         }
       }
