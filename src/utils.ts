@@ -4,6 +4,8 @@ import { chainNames } from '@airswap/constants'
 export const decimals: any = {
   '0x07865c6e87b9f70255377e024ace6630c1eaa37f': 6,
   '0x79c950c7446b234a6ad53b908fbf342b01c4d446': 6,
+  '0xf56dc6695cf1f5c364edebc7dc7077ac9b586068': 6,
+  '0x1990bc6dfe2ef605bfc08f5a23564db75642ad73': 6
 }
 
 export function getNodeURL(chainId: number, INFURA_ID: string) {
