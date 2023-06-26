@@ -38,8 +38,8 @@ async function start () {
   console.log(`Loaded signer`, wallet.address)
   console.log(`Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]})`)
 
-  LastLook(config)
-  console.log(`Last-look protocol started`)
+  // LastLook(config)
+  // console.log(`Last-look protocol started`)
 
   RFQ(config)
   console.log(`Request-for-quote started`)

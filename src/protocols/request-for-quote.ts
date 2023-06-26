@@ -81,14 +81,14 @@ const start = function (config: any) {
               toDecimalString(senderAmount, senderDecimals),
               config.levels.RFQLevels[i].bid
             )
-            signerAmount = toAtomicString(signerAmount, signerDecimals)
+            signerAmount = toAtomicString('100', signerDecimals)
           } else {
             signerAmount = req.body.params.signerAmount
             senderAmount = calculateCostFromLevels(
               toDecimalString(signerAmount, signerDecimals),
               config.levels.RFQLevels[i].ask
             )
-            senderAmount = toAtomicString(senderAmount, senderDecimals)
+            senderAmount = toAtomicString('100', senderDecimals)
           }
         }
       }
