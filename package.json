@@ -9,12 +9,15 @@
   "scripts": {
     "build": "rm -rf ./api && tsc -p .",
     "dev": "ts-node src/index.ts",
-    "start": "node api/index.js"
+    "start": "node api/index.js",
+    "lint": "yarn eslint \"./**/*.ts\"",
+    "pretty:check": "prettier --check \"./**/*.ts\"",
+    "pretty:fix": "prettier --write \"./**/*.ts\""
   },
   "dependencies": {
-    "@airswap/constants": "^4.0.5",
-    "@airswap/libraries": "^4.0.10",
-    "@airswap/utils": "^4.0.6",
+    "@airswap/constants": "4.0.10",
+    "@airswap/libraries": "4.0.19",
+    "@airswap/utils": "4.0.8",
     "axios": "^0.23.0",
     "bignumber.js": "^9.0.1",
     "body-parser": "^1.19.0",
@@ -29,8 +32,8 @@
     "@types/express": "^4.17.13",
     "@types/node": "^16.10.9",
     "@types/ws": "^7.4.7",
-    "eslint": "7.32.0",
-    "prettier": "^2.3.2",
+    "eslint": "^8.46.0",
+    "prettier": "^3.0.1",
     "ts-node": "^10.2.0",
     "tsc": "^2.0.3",
     "typescript": "^4.4.3"

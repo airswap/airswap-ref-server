@@ -6,7 +6,7 @@ import {
   createOrderERC20,
   createOrderERC20Signature,
   toAtomicString,
-  calculateCostFromLevels,
+  getCostFromPricing,
 } from '@airswap/utils'
 import bodyParser from 'body-parser'
 import Cors from 'cors'
@@ -71,89 +71,56 @@ const start = function (config: any) {
         id: req.body.id,
         error: {
           code: -33601,
-          message: 'Not serving chain'
+          message: 'Not serving chain',
         },
       })
       return
     }
 
-    let { signerToken, senderWallet, senderToken, swapContract } = req.body.params
+    let { signerToken, senderWallet, senderToken, swapContract } =
+      req.body.params
     let signerAmount
     let senderAmount
 
-    const senderDecimals: any = decimals[senderToken.toLowerCase()]
-    const signerDecimals: any = decimals[signerToken.toLowerCase()]
-    let found = false
+    const signerDecimals = decimals[signerToken.toLowerCase()]
+    const senderDecimals = decimals[senderToken.toLowerCase()]
 
-    for (const i in config.levels.RFQLevels) {
-      if (config.levels.RFQLevels[i].baseToken.toLowerCase() === senderToken.toLowerCase()) {
-        if (config.levels.RFQLevels[i].quoteToken.toLowerCase() === signerToken.toLowerCase()) {
-          found = true
-          if (req.body.method === 'getSignerSideOrderERC20') {
-            senderAmount = req.body.params.senderAmount
-            try {
-              signerAmount = calculateCostFromLevels(
-                toDecimalString(senderAmount, senderDecimals),
-                config.levels.RFQLevels[i].bid
-              )
-            } catch (e: any) {
-              if (Number(req.body.params.chainId) === ChainIds.LINEAGOERLI) {
-                signerAmount = '100'
-              } else {
-                res.statusCode = 200
-                res.json({
-                  jsonrpc: '2.0',
-                  id: req.body.id,
-                  error: {
-                    code: -33601,
-                    message: e.message
-                  },
-                })
-                return
-              }
-            }
-            signerAmount = toAtomicString(signerAmount, signerDecimals)
-          } else {
-            signerAmount = req.body.params.signerAmount
-            try {
-              senderAmount = calculateCostFromLevels(
-                toDecimalString(signerAmount, signerDecimals),
-                config.levels.RFQLevels[i].ask
-              )
-            } catch (e: any) {
-              if (Number(req.body.params.chainId) === ChainIds.LINEAGOERLI) {
-                senderAmount = '100'
-              } else {
-                res.statusCode = 200
-                res.json({
-                  jsonrpc: '2.0',
-                  id: req.body.id,
-                  error: {
-                    code: -33601,
-                    message: e.message
-                  },
-                })
-                return
-              }
-            }
-            senderAmount = toAtomicString(senderAmount, senderDecimals)
-          }
-        }
-      }
+    if (req.body.method === 'getSignerSideOrderERC20') {
+      senderAmount = toDecimalString(
+        req.body.params.senderAmount,
+        decimals[senderToken.toLowerCase()]
+      )
+      signerAmount = getCostFromPricing(
+        'buy',
+        senderAmount,
+        senderToken,
+        signerToken,
+        config.levels.RFQLevels
+      )
+    } else {
+      signerAmount = toDecimalString(
+        req.body.params.signerAmount,
+        decimals[signerToken.toLowerCase()]
+      )
+      senderAmount = getCostFromPricing(
+        'sell',
+        signerAmount,
+        signerToken,
+        senderToken,
+        config.levels.RFQLevels
+      )
     }
-
-    if (!found) {
+    if (signerAmount === null || senderAmount === null) {
       res.statusCode = 200
       res.json({
         jsonrpc: '2.0',
         id: req.body.id,
         error: {
           code: -33601,
-          message: 'Not serving pair'
+          message: 'Not serving pair',
         },
       })
     } else {
-
       const order = createOrderERC20({
         nonce: String(Date.now()),
         expiry: String(
@@ -162,10 +129,10 @@ const start = function (config: any) {
         protocolFee: String(process.env.PROTOCOL_FEE),
         signerWallet: config.wallet.address,
         signerToken,
-        signerAmount,
+        signerAmount: toAtomicString(signerAmount, signerDecimals),
         senderWallet,
         senderToken,
-        senderAmount,
+        senderAmount: toAtomicString(senderAmount, senderDecimals),
       })
 
       const signature = await createOrderERC20Signature(

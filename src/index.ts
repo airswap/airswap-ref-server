@@ -14,10 +14,12 @@ import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 
 dotenv.config()
 
-async function start () {
+async function start() {
   const port = parseInt(String(process.env.PORT), 10) || 3000
   const chainId = Number(process.env.CHAIN_ID)
-  const provider = new ethers.providers.JsonRpcProvider(getNodeURL(chainId, String(process.env.INFURA_API_KEY)))
+  const provider = new ethers.providers.JsonRpcProvider(
+    getNodeURL(chainId, String(process.env.INFURA_API_KEY))
+  )
   await provider.getNetwork()
 
   const wallet = new ethers.Wallet(String(process.env.PRIVATE_KEY), provider)
@@ -28,15 +30,17 @@ async function start () {
     server,
     levels: {
       RFQLevels: (RFQLevels as any)[chainId],
-      LLLevels: (LLLevels as any)[chainId]
+      LLLevels: (LLLevels as any)[chainId],
     },
     wallet,
     chainId,
-    confirmations: String(process.env.CONFIRMATIONS || '2')
+    confirmations: String(process.env.CONFIRMATIONS || '2'),
   }
 
   console.log(`Loaded signer`, wallet.address)
-  console.log(`Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]})`)
+  console.log(
+    `Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]})`
+  )
 
   if (chainId !== ChainIds.LINEAGOERLI) {
     LastLook(config)
