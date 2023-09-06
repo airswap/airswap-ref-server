@@ -3,13 +3,21 @@ import * as ethers from 'ethers'
 import express from 'express'
 import { createServer } from 'http'
 
-import LastLook from './protocols/last-look'
-import RFQ from './protocols/request-for-quote'
-import { RFQLevels, LLLevels } from './levels'
-import { getNodeURL } from './utils'
-import { chainNames, ChainIds } from '@airswap/constants'
+import {
+  Discovery,
+  RequestForQuoteERC20,
+  PricingERC20,
+  LastLookERC20,
+  StorageERC20,
+} from './protocols'
 
-// @ts-ignore
+import HTTP from './servers/http'
+import WS from './servers/ws'
+
+import { Levels } from './levels'
+import { getNodeURL } from './utils'
+import { chainNames } from '@airswap/constants'
+
 import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 
 dotenv.config()
@@ -23,35 +31,38 @@ async function start() {
   await provider.getNetwork()
 
   const wallet = new ethers.Wallet(String(process.env.PRIVATE_KEY), provider)
-  const app = express()
-  const server = createServer(app)
+  console.log(`Loaded signer`, wallet.address)
+
+  console.log(
+    `Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]})`
+  )
+
   const config = {
-    app,
-    server,
-    levels: {
-      RFQLevels: (RFQLevels as any)[chainId],
-      LLLevels: (LLLevels as any)[chainId],
-    },
+    levels: (Levels as any)[chainId],
     wallet,
     chainId,
     confirmations: String(process.env.CONFIRMATIONS || '2'),
   }
 
-  console.log(`Loaded signer`, wallet.address)
-  console.log(
-    `Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]})`
-  )
+  const app = express()
+  const server = createServer(app)
 
-  if (chainId !== ChainIds.LINEAGOERLI) {
-    LastLook(config)
-    console.log(`Last-look protocol started`)
-  }
+  const protocols = [
+    new RequestForQuoteERC20(config),
+    new PricingERC20(config),
+    new LastLookERC20(config),
+    new StorageERC20(config),
+  ]
+  protocols.push(new Discovery(config, protocols))
 
-  RFQ(config)
-  console.log(`Request-for-quote started`)
-
+  new HTTP(config, app, protocols), new WS(config, server, protocols)
   server.listen(port)
-  console.log(`Listening on port ${port}`)
+
+  console.log(`Listening on port ${port} (HTTP, WS)`)
+
+  for (let idx in protocols) {
+    console.log(`· ${protocols[idx].toString()}`)
+  }
 }
 
 start()

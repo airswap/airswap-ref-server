@@ -23,3 +23,19 @@ export function getNodeURL(chainId: number, INFURA_ID: string) {
       return `https://${selectedChain}.infura.io/v3/${INFURA_ID}`
   }
 }
+
+export function result(id: string, result: any) {
+  return JSON.stringify({
+    jsonrpc: '2.0',
+    id,
+    result,
+  })
+}
+
+export function error(id: string, error: any) {
+  return JSON.stringify({
+    jsonrpc: '2.0',
+    id,
+    error,
+  })
+}
