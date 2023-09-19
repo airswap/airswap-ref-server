@@ -22,9 +22,7 @@ export class PricingERC20 extends Protocol {
   }
 
   unsubscribe(subscriber: WebSocket) {
-    const idx = this.subscribers.findIndex((ws: WebSocket) => {
-      if (ws === subscriber) return true
-    })
+    const idx = this.subscribers.findIndex((ws: WebSocket) => ws === subscriber)
     this.subscribers.splice(idx, 1)
   }
 

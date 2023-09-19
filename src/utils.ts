@@ -32,10 +32,10 @@ export function result(id: string, result: any) {
   })
 }
 
-export function error(id: string, error: any) {
+export function error(id: string, code: any, message: any) {
   return JSON.stringify({
     jsonrpc: '2.0',
     id,
-    error,
+    error: { code, message },
   })
 }

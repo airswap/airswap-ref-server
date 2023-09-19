@@ -16,40 +16,30 @@ export class RequestForQuoteERC20 extends Protocol {
     super(config, Protocols.RequestForQuoteERC20)
   }
 
-  async received(
-    id: any,
-    method: any,
-    params: any,
-    respond: any,
-    ws: WebSocket
-  ) {
+  async received(id: any, method: any, params: any, respond: any) {
     if (
       method === 'getSignerSideOrderERC20' ||
       method === 'getSenderSideOrderERC20'
     ) {
-      if (Number(params.chainId) !== this.config.chainId) {
-        respond(
-          error(id, {
-            code: -33601,
-            message: 'Not serving chain',
-          })
-        )
+      let { signerToken, senderWallet, senderToken, swapContract } = params
+      if (!signerToken || !senderToken || !senderWallet || !swapContract) {
+        respond(error(id, -33604, 'Invalid request params'))
         return
       }
-
-      let { signerToken, senderWallet, senderToken, swapContract } = params
-      let signerAmount
-      let senderAmount
+      if (Number(params.chainId) !== this.config.chainId) {
+        respond(error(id, -33601, 'Not serving chain'))
+        return
+      }
 
       const signerDecimals = decimals[signerToken.toLowerCase()]
       const senderDecimals = decimals[senderToken.toLowerCase()]
 
+      let signerAmount
+      let senderAmount
+
       switch (method) {
         case 'getSignerSideOrderERC20':
-          senderAmount = toDecimalString(
-            params.senderAmount,
-            decimals[senderToken.toLowerCase()]
-          )
+          senderAmount = toDecimalString(params.senderAmount, senderDecimals)
           signerAmount = getCostFromPricing(
             'buy',
             senderAmount,
@@ -59,10 +49,7 @@ export class RequestForQuoteERC20 extends Protocol {
           )
           break
         case 'getSenderSideOrderERC20':
-          signerAmount = toDecimalString(
-            params.signerAmount,
-            decimals[signerToken.toLowerCase()]
-          )
+          signerAmount = toDecimalString(params.signerAmount, signerDecimals)
           senderAmount = getCostFromPricing(
             'sell',
             signerAmount,
@@ -107,12 +94,7 @@ export class RequestForQuoteERC20 extends Protocol {
           })
         )
       } else {
-        respond(
-          error(id, {
-            code: -33601,
-            message: 'Not serving pair',
-          })
-        )
+        respond(error(id, -33601, 'Not serving pair'))
       }
     }
   }

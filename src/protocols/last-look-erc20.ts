@@ -45,11 +45,11 @@ export class LastLookERC20 extends Protocol {
           })
           .catch((error: any) => {
             console.log(error.message)
-            respond(error(id, error.message))
+            respond(error(id, -32603, error.message))
           })
       } else {
         console.log('Errors...', checkResultToErrors(errCount, errors))
-        respond(error(id, errors))
+        respond(error(id, -33604, errors))
       }
     }
   }
