@@ -1,4 +1,5 @@
 'use strict'
+import WebSocket from 'ws'
 
 export class Protocol {
   public interfaceId: string
@@ -7,6 +8,10 @@ export class Protocol {
   constructor(config: any, interfaceId: string) {
     this.config = config
     this.interfaceId = interfaceId
+  }
+
+  closed(ws: WebSocket) {
+    // noop
   }
 
   toString() {
