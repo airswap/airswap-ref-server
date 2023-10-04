@@ -32,8 +32,10 @@ export class RequestForQuoteERC20 extends Protocol {
         respond(error(id, -33601, 'Not serving chain'))
         return
       }
-      if (swapContract !== swapDeploys[this.config.chainId]) {
-        respond(error(id, -33604, `Using swap contract ${swapDeploys[this.config.chainId]}`))
+      if (swapContract !== this.config.swapContract) {
+        respond(
+          error(id, -33604, `Using swap contract ${this.config.swapContract}`)
+        )
         return
       }
 
@@ -84,8 +86,10 @@ export class RequestForQuoteERC20 extends Protocol {
         const signature = await createOrderERC20Signature(
           order,
           `0x${process.env.PRIVATE_KEY}`,
-          swapContract,
-          this.config.chainId
+          this.config.swapContract,
+          this.config.chainId,
+          this.config.domainVersion,
+          this.config.domainName
         )
 
         console.log('Making...', {

@@ -16,7 +16,11 @@ import WS from './servers/ws'
 
 import { Levels } from './levels'
 import { getNodeURL } from './utils'
-import { chainNames } from '@airswap/constants'
+import {
+  chainNames,
+  DOMAIN_VERSION_SWAP_ERC20,
+  DOMAIN_NAME_SWAP_ERC20,
+} from '@airswap/constants'
 
 import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 
@@ -34,13 +38,16 @@ async function start() {
   console.log(`Loaded signer`, wallet.address)
 
   console.log(
-    `Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]})`
+    `Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]}, Name: ${DOMAIN_NAME_SWAP_ERC20}, Version: ${DOMAIN_VERSION_SWAP_ERC20})`
   )
 
   const config = {
     levels: (Levels as any)[chainId],
     wallet,
     chainId,
+    swapContract: swapDeploys[chainId],
+    domainName: DOMAIN_NAME_SWAP_ERC20,
+    domainVersion: DOMAIN_VERSION_SWAP_ERC20,
     confirmations: String(process.env.CONFIRMATIONS || '2'),
   }
 
