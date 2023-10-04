@@ -8,6 +8,8 @@ import {
 } from '@airswap/utils'
 import { Protocols } from '@airswap/constants'
 
+import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
+
 import { Protocol } from './protocol'
 import { decimals, result, error } from '../utils'
 
@@ -28,6 +30,10 @@ export class RequestForQuoteERC20 extends Protocol {
       }
       if (Number(params.chainId) !== this.config.chainId) {
         respond(error(id, -33601, 'Not serving chain'))
+        return
+      }
+      if (swapContract !== swapDeploys[this.config.chainId]) {
+        respond(error(id, -33604, `Using swap contract ${swapDeploys[this.config.chainId]}`))
         return
       }
 
