@@ -45,27 +45,32 @@ export class RequestForQuoteERC20 extends Protocol {
       let signerAmount
       let senderAmount
 
-      switch (method) {
-        case 'getSignerSideOrderERC20':
-          senderAmount = toDecimalString(params.senderAmount, senderDecimals)
-          signerAmount = getCostFromPricing(
-            'buy',
-            senderAmount,
-            senderToken,
-            signerToken,
-            this.config.levels
-          )
-          break
-        case 'getSenderSideOrderERC20':
-          signerAmount = toDecimalString(params.signerAmount, signerDecimals)
-          senderAmount = getCostFromPricing(
-            'sell',
-            signerAmount,
-            signerToken,
-            senderToken,
-            this.config.levels
-          )
-          break
+      try {
+        switch (method) {
+          case 'getSignerSideOrderERC20':
+            senderAmount = toDecimalString(params.senderAmount, senderDecimals)
+            signerAmount = getCostFromPricing(
+              'buy',
+              senderAmount,
+              senderToken,
+              signerToken,
+              this.config.levels
+            )
+            break
+          case 'getSenderSideOrderERC20':
+            signerAmount = toDecimalString(params.signerAmount, signerDecimals)
+            senderAmount = getCostFromPricing(
+              'sell',
+              signerAmount,
+              signerToken,
+              senderToken,
+              this.config.levels
+            )
+            break
+        }
+      } catch (e: any) {
+        respond(error(id, -33603, e.message))
+        return
       }
 
       if (signerAmount && senderAmount) {
