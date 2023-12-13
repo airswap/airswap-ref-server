@@ -9,6 +9,7 @@ import {
   PricingERC20,
   LastLookERC20,
   StorageERC20,
+  Storage,
 } from './protocols'
 
 import HTTP from './servers/http'
@@ -59,6 +60,7 @@ async function start() {
     new PricingERC20(config),
     new LastLookERC20(config),
     new StorageERC20(config),
+    new Storage(config),
   ]
   protocols.push(new Discovery(config, protocols))
 
