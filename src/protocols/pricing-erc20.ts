@@ -35,6 +35,7 @@ export class PricingERC20 extends Protocol {
   ) {
     switch (method) {
       case 'getPricingERC20':
+      case 'getAllPricingERC20':
         respond(result(id, this.config.levels))
         break
       case 'subscribePricingERC20':
