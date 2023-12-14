@@ -30,12 +30,14 @@ export default class HTTP {
 
     app.get('*', (req: any, res: any) => {
       res.statusCode = 200
+      res.set('Content-Type', 'application/json');
       res.send(
         JSON.stringify({
-          wallet: config.wallet.address,
           chainId: config.chainId,
-          pricing: config.levels,
-        })
+          wallet: config.wallet.address,
+          protocols: protocols.map((protocol: any) => protocol.toString()),
+          pricing: config.levels
+        }, null, 2)
       )
     })
 
