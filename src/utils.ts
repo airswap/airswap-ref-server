@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { chainNames } from '@airswap/constants'
+import { chainLabels } from '@airswap/constants'
 
 export const decimals: any = {
   '0x07865c6e87b9f70255377e024ace6630c1eaa37f': 6,
@@ -9,7 +9,7 @@ export const decimals: any = {
 }
 
 export function getNodeURL(chainId: number, INFURA_ID: string) {
-  const selectedChain = chainNames[chainId].toLowerCase()
+  const selectedChain = chainLabels[chainId].toLowerCase()
   switch (chainId) {
     case 56:
       return 'https://bsc-dataseed.binance.org/'
