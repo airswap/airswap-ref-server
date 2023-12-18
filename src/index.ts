@@ -14,6 +14,7 @@ import {
 
 import HTTP from './servers/http'
 import WS from './servers/ws'
+import Redis from './stores/redis'
 
 import { Levels } from './levels'
 import { getNodeURL } from './utils'
@@ -60,7 +61,7 @@ async function start() {
     new PricingERC20(config),
     new LastLookERC20(config),
     new StorageERC20(config),
-    new Storage(config),
+    new Storage(config, new Redis(process.env.REDISCLOUD_URL)),
   ]
   protocols.push(new Discovery(config, protocols))
 

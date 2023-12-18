@@ -24,6 +24,7 @@
     "ethers": "^5.4.4",
     "express": "^4.17.1",
     "pg": "^8.11.3",
+    "redis": "^4.6.12",
     "ws": "^8.0.0"
   },
   "devDependencies": {
