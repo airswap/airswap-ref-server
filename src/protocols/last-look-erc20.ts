@@ -1,3 +1,4 @@
+import WebSocket from 'ws'
 import { ethers } from 'ethers'
 import { checkResultToErrors, orderERC20ToParams } from '@airswap/utils'
 import { Protocols, explorerUrls } from '@airswap/constants'
@@ -10,12 +11,45 @@ import { Protocol } from './protocol'
 import { result, error } from '../utils'
 
 export class LastLookERC20 extends Protocol {
+  public subscribers: WebSocket[] = []
+
   constructor(config: any) {
     super(config, Protocols.LastLookERC20)
+    setInterval(() => {
+      for (let idx in this.subscribers) {
+        this.subscribers[idx].send(
+          JSON.stringify({
+            jsonrpc: '2.0',
+            method: 'setPricingERC20',
+            params: [config.levels],
+          })
+        )
+      }
+    }, 1000)
   }
 
-  async received(id: any, method: any, params: any, respond: any) {
-    if (method === 'considerOrderERC20') {
+  unsubscribe(subscriber: WebSocket) {
+    const idx = this.subscribers.findIndex((ws: WebSocket) => ws === subscriber)
+    this.subscribers.splice(idx, 1)
+  }
+
+  async received(id: any, method: any, params: any, respond: any, ws: WebSocket) {
+    switch (method) {
+    case 'getPricingERC20':
+    case 'getAllPricingERC20':
+      respond(result(id, this.config.levels))
+      break
+    case 'subscribePricingERC20':
+    case 'subscribeAllPricingERC20':
+      this.subscribers.push(ws)
+      respond(result(id, this.config.levels))
+      break
+    case 'unsubscribePricingERC20':
+    case 'unsubscribeAllPricingERC20':
+      this.unsubscribe(ws)
+      respond(result(id, true))
+      break
+    case 'considerOrderERC20':
       console.log('Checking...', params)
       const [errCount, errors] = await SwapERC20.getContract(
         this.config.wallet.provider,

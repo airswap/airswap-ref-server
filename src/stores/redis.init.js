@@ -7,26 +7,30 @@ const client = createClient({
 });
 client.connect().then(async () => {
   try {
-    await client.ft.dropIndex('index')
-    await client.ft.create('index', {
+    await client.flushAll()
+    await client.ft.create('index:orders', {
+      '$.signer.wallet': {
+        type: SchemaFieldTypes.TEXT,
+        AS: 'signerWallet'
+      },
       '$.signer.token': {
         type: SchemaFieldTypes.TEXT,
         AS: 'signerToken'
       },
-      '$.signer.wallet': {
+      '$.signer.id': {
         type: SchemaFieldTypes.TEXT,
-        AS: 'signerWallet'
+        AS: 'signerId'
+      },
+      '$.nonce': {
+        type: SchemaFieldTypes.TEXT,
+        AS: 'nonce'
       },
     }, {
       ON: 'JSON',
     });
     process.exit(0);
   } catch (e) {
-    if (e.message === 'Index already exists') {
-        console.log('Index exists already, skipped creation.');
-    } else {
-        console.error(e);
-        process.exit(1);
-    }
+    console.error(e);
+    process.exit(1);
   }
 })

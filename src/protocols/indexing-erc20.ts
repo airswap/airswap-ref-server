@@ -4,11 +4,11 @@ import { OrderERC20 } from '@airswap/types'
 
 import { Protocol } from './protocol'
 
-export class StorageERC20 extends Protocol {
+export class IndexingERC20 extends Protocol {
   public orders: OrderERC20[] = []
 
   constructor(config: any) {
-    super(config, Protocols.StorageERC20)
+    super(config, Protocols.IndexingERC20)
   }
 
   async received(id: any, method: any, params: any, respond: any) {
