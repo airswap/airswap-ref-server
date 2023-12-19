@@ -6,14 +6,14 @@ import { createServer } from 'http'
 import {
   Discovery,
   RequestForQuoteERC20,
-  PricingERC20,
   LastLookERC20,
-  StorageERC20,
-  Storage,
+  IndexingERC20,
+  Indexing,
 } from './protocols'
 
 import HTTP from './servers/http'
 import WS from './servers/ws'
+import Redis from './stores/redis'
 
 import { Levels } from './levels'
 import { getNodeURL } from './utils'
@@ -57,10 +57,9 @@ async function start() {
 
   const protocols = [
     new RequestForQuoteERC20(config),
-    new PricingERC20(config),
     new LastLookERC20(config),
-    new StorageERC20(config),
-    new Storage(config),
+    new IndexingERC20(config),
+    new Indexing(config, new Redis(process.env.REDISCLOUD_URL)),
   ]
   protocols.push(new Discovery(config, protocols))
 
