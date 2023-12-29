@@ -20,10 +20,10 @@ export default class Redis {
   async read(filter: any, offset: number, limit: number) {
     await this.client.connect();
     const args = []
-    if (filter.signerTokens?.length) args.push(`@signerToken:(${filter.signerTokens[0]})`)
-    if (filter.signerIds?.length) args.push(`@signerId:(${filter.signerIds[0]})`)
+    if (filter.senderToken) args.push(`@senderToken:(${filter.senderToken})`)
+    if (filter.signerToken) args.push(`@signerToken:(${filter.signerToken})`)
+    if (filter.signerId) args.push(`@signerId:(${filter.signerId})`)
     if (filter.signerWallet) args.push(`@signerWallet:(${filter.signerWallet})`)
-    if (filter.nonce) args.push(`@nonce:(${filter.nonce})`)
     const { total, documents } = await this.client.ft.search(
       'index:orders',
       args.join(' ')

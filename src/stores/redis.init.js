@@ -21,9 +21,9 @@ client.connect().then(async () => {
         type: SchemaFieldTypes.TEXT,
         AS: 'signerId'
       },
-      '$.nonce': {
+      '$.sender.token': {
         type: SchemaFieldTypes.TEXT,
-        AS: 'nonce'
+        AS: 'senderToken'
       },
     }, {
       ON: 'JSON',
