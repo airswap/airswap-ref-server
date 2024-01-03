@@ -8,7 +8,7 @@ const client = createClient({
 client.connect().then(async () => {
   try {
     await client.flushAll()
-    await client.ft.create('index:orders', {
+    await client.ft.create('index:ordersBySigner', {
       '$.signer.wallet': {
         type: SchemaFieldTypes.TEXT,
         AS: 'signerWallet'
