@@ -40,10 +40,9 @@ export class Indexing extends Protocol {
       case 'getOrders':
         const filter = params[0]
         try {
-          const { documents, total } = await this.store.read(
-            filter,
-            filter.offset,
-            filter.limit
+          const { documents, total } = await this.store.read.apply(
+            this.store,
+            params
           )
           respond(
             result(id, {
@@ -52,8 +51,8 @@ export class Indexing extends Protocol {
               total: total,
             })
           )
-        } catch (e) {
-          respond(error(id, -32605, 'unable to get'))
+        } catch (e: any) {
+          respond(error(id, -32605, `unable to get: ${e.message}`))
         }
         break
     }

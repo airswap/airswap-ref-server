@@ -31,7 +31,7 @@ async function start() {
   const port = parseInt(String(process.env.PORT), 10) || 3000
   const chainId = Number(process.env.CHAIN_ID)
   const provider = new ethers.providers.JsonRpcProvider(
-    getNodeURL(chainId, String(process.env.INFURA_API_KEY))
+    getNodeURL(chainId, String(process.env.INFURA_API_KEY || ''))
   )
   await provider.getNetwork()
 

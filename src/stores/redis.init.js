@@ -9,6 +9,14 @@ client.connect().then(async () => {
   try {
     await client.flushAll()
     await client.ft.create('index:ordersBySigner', {
+      '$.nonce': {
+        type: SchemaFieldTypes.TEXT,
+        AS: 'nonce'
+      },
+      '$.expiry': {
+        type: SchemaFieldTypes.TEXT,
+        AS: 'expiry'
+      },
       '$.signer.wallet': {
         type: SchemaFieldTypes.TEXT,
         AS: 'signerWallet'
@@ -17,9 +25,17 @@ client.connect().then(async () => {
         type: SchemaFieldTypes.TEXT,
         AS: 'signerToken'
       },
+      '$.signer.amount': {
+        type: SchemaFieldTypes.TEXT,
+        AS: 'signerAmount'
+      },
       '$.signer.id': {
         type: SchemaFieldTypes.TEXT,
         AS: 'signerId'
+      },
+      '$.sender.amount': {
+        type: SchemaFieldTypes.TEXT,
+        AS: 'senderAmount'
       },
       '$.sender.token': {
         type: SchemaFieldTypes.TEXT,

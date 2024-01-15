@@ -1,5 +1,5 @@
 import { createClient } from 'redis'
-import { FullOrder } from '@airswap/types'
+import { FullOrder, OrderFilter, Indexes, Direction } from '@airswap/types'
 
 function tokenKey(token: string, id: string) {
   return `ordersByToken:${token.toLowerCase()}:${id}`
@@ -8,6 +8,8 @@ function tokenKey(token: string, id: string) {
 function signerKey(signer: string, nonce: string) {
   return `ordersBySigner:${signer.toLowerCase()}:${nonce}`
 }
+
+const DEFAULT_LIMIT = 10
 
 export default class Redis {
   private client: any
@@ -52,7 +54,13 @@ export default class Redis {
     return true
   }
 
-  async read(filter: any, offset: number, limit: number) {
+  async read(
+    filter: OrderFilter,
+    offset = 0,
+    limit = DEFAULT_LIMIT,
+    by = Indexes.EXPIRY,
+    direction = Direction.ASC
+  ) {
     if (!this.client.isOpen) {
       await this.client.connect()
     }
@@ -64,10 +72,14 @@ export default class Redis {
     if (filter.signerWallet) args.push(`@signerWallet:(${filter.signerWallet})`)
     const { total, documents } = await this.client.ft.search(
       'index:ordersBySigner',
-      args.join(' ')
+      args.join(' '),
+      {
+        LIMIT: { from: offset, size: limit },
+        SORTBY: { BY: by, DIRECTION: direction },
+      }
     )
     return {
-      documents: documents.slice(offset, limit).map((res: any) => res.value),
+      documents: documents.map((res: any) => res.value),
       offset,
       total,
     }
