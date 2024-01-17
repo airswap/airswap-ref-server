@@ -46,7 +46,7 @@ export class Indexing extends Protocol {
           )
           respond(
             result(id, {
-              orders: documents.map((order: FullOrder) => ({ order })),
+              orders: documents.map((order: FullOrder) => order),
               offset: filter.offset,
               total: total,
             })
