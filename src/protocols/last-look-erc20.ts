@@ -57,11 +57,11 @@ export class LastLookERC20 extends Protocol {
         break
       case 'considerOrderERC20':
         console.log('Checking...', params)
-        const [errCount, errors] = await SwapERC20.getContract(
+        const errors = await SwapERC20.getContract(
           this.config.wallet.provider,
           this.config.chainId
         ).check(this.config.wallet.address, ...orderERC20ToParams(params))
-        if (errCount.isZero()) {
+        if (!errors.length) {
           const gasPrice = await this.config.wallet.getGasPrice()
           console.log(
             'No errors; taking...',

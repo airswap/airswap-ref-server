@@ -13,13 +13,15 @@ export class Indexing extends Protocol {
   constructor(config: any, store: any) {
     super(config, Protocols.Indexing)
     this.store = store
-    const contract = new Contract(
-      swapDeploys[String(config.chainId)],
-      SwapContract.abi,
-      config.wallet.provider
-    )
-    contract.on('Swap', this.takenOrCancelled.bind(this))
-    contract.on('Cancel', this.takenOrCancelled.bind(this))
+    if (swapDeploys[String(config.chainId)]) {
+      const contract = new Contract(
+        swapDeploys[String(config.chainId)],
+        SwapContract.abi,
+        config.wallet.provider
+      )
+      contract.on('Swap', this.takenOrCancelled.bind(this))
+      contract.on('Cancel', this.takenOrCancelled.bind(this))
+    }
   }
 
   async takenOrCancelled(nonce: BigNumber, signerWallet: string) {

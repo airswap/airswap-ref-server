@@ -1,15 +1,16 @@
 import { chainLabels, apiUrls } from '@airswap/constants'
 
 export const decimals: any = {
-  '0x07865c6e87b9f70255377e024ace6630c1eaa37f': 6,
-  '0x79c950c7446b234a6ad53b908fbf342b01c4d446': 6,
+  '0x20aaebad8c7c6ffb6fdaa5a622c399561562beea': 6,
+  '0xf450ef4f268eaf2d3d8f9ed0354852e255a5eaef': 6,
   '0xf56dc6695cf1f5c364edebc7dc7077ac9b586068': 6,
   '0x1990bc6dfe2ef605bfc08f5a23564db75642ad73': 6,
+  '0xdac17f958d2ee523a2206206994597c13d831ec7': 6,
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': 6
 }
 
 export function getNodeURL(chainId: number, INFURA_ID: string) {
-  const selectedChain = chainLabels[chainId].toLowerCase()
-  if (INFURA_ID) return `https://${selectedChain}.infura.io/v3/${INFURA_ID}`
+  if (INFURA_ID) return chainLabels[chainId] ? `https://${chainLabels[chainId].toLowerCase()}.infura.io/v3/${INFURA_ID}` : undefined
   return apiUrls[chainId]
 }
 

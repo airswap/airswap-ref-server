@@ -39,13 +39,24 @@ async function start() {
   const provider = new ethers.providers.JsonRpcProvider(
     getNodeURL(chainId, String(process.env.INFURA_API_KEY || ''))
   )
+  const rpcUrl = getNodeURL(chainId, String(process.env.INFURA_API_KEY || ''))
+  if (!rpcUrl) {
+    console.error(`No rpc url available for chainId ${chainId}`)
+    return
+  }
+  console.log('Connecting to rpc', rpcUrl)
   await provider.getNetwork()
 
   const wallet = new ethers.Wallet(String(process.env.PRIVATE_KEY), provider)
-  console.log(`Loaded signer`, wallet.address)
+  console.log('Loaded signer', wallet.address)
+
+  if (!swapDeploys[chainId]) {
+    console.error(`No swap-erc20 contract available for chainId ${chainId}`)
+    return
+  }
 
   console.log(
-    `Serving for ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]}, Name: ${DOMAIN_NAME_SWAP_ERC20}, Version: ${DOMAIN_VERSION_SWAP_ERC20})`
+    `\nNow serving ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]}, Name: ${DOMAIN_NAME_SWAP_ERC20}, Version: ${DOMAIN_VERSION_SWAP_ERC20})\n`
   )
 
   const config = {
