@@ -1,6 +1,6 @@
 import WebSocket from 'ws'
 import { ethers } from 'ethers'
-import { checkResultToErrors, orderERC20ToParams } from '@airswap/utils'
+import { parseCheckResult, orderERC20ToParams } from '@airswap/utils'
 import { Protocols, explorerUrls } from '@airswap/constants'
 import { SwapERC20 } from '@airswap/libraries'
 
@@ -91,7 +91,7 @@ export class LastLookERC20 extends Protocol {
               respond(error(id, -32603, error.message))
             })
         } else {
-          console.log('Errors...', checkResultToErrors(errCount, errors))
+          console.log('Errors...', parseCheckResult(errors))
           respond(error(id, -33604, errors))
         }
     }

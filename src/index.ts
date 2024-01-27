@@ -30,6 +30,12 @@ dotenv.config()
 async function start() {
   const port = parseInt(String(process.env.PORT), 10) || 3000
   const chainId = Number(process.env.CHAIN_ID)
+
+  if (!swapDeploys[chainId]) {
+    console.log(`Chain ${chainId} not supported; update process.env.CHAIN_ID`)
+    return
+  }
+
   const provider = new ethers.providers.JsonRpcProvider(
     getNodeURL(chainId, String(process.env.INFURA_API_KEY || ''))
   )
