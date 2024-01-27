@@ -30,11 +30,12 @@ export class Indexing extends Protocol {
     switch (method) {
       case 'addOrder':
         const order = params[0]
+        const tags = params[1]
         try {
-          await this.store.write(order)
+          await this.store.write(order, tags)
           respond(result(id, { message: 'OK' }))
-        } catch (e) {
-          respond(error(id, -32605, 'unable to add'))
+        } catch (e: any) {
+          respond(error(id, -32605, `unable to add: ${e.message}`))
         }
         break
       case 'getOrders':
