@@ -21,7 +21,7 @@ import {
   chainNames,
   DOMAIN_VERSION_SWAP_ERC20,
   DOMAIN_NAME_SWAP_ERC20,
-} from '@airswap/constants'
+} from '@airswap/utils'
 
 import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 

@@ -1,6 +1,6 @@
 import { BigNumber, Contract } from 'ethers'
-import { Protocols } from '@airswap/constants'
-import { FullOrder } from '@airswap/types'
+import { ProtocolIds } from '@airswap/utils'
+import { FullOrder } from '@airswap/utils'
 import * as SwapContract from '@airswap/swap/build/contracts/Swap.sol/Swap.json'
 import * as swapDeploys from '@airswap/swap/deploys.js'
 
@@ -11,7 +11,7 @@ export class Indexing extends Protocol {
   private store: any
 
   constructor(config: any, store: any) {
-    super(config, Protocols.Indexing)
+    super(config, ProtocolIds.Indexing)
     this.store = store
     if (swapDeploys[String(config.chainId)]) {
       const contract = new Contract(

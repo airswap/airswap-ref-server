@@ -1,12 +1,11 @@
 import WebSocket from 'ws'
-import { ethers } from 'ethers'
-import { parseCheckResult, orderERC20ToParams } from '@airswap/utils'
-import { Protocols, explorerUrls } from '@airswap/constants'
+import {
+  parseCheckResult,
+  orderERC20ToParams,
+  ProtocolIds,
+  explorerUrls,
+} from '@airswap/utils'
 import { SwapERC20 } from '@airswap/libraries'
-
-import * as SwapContract from '@airswap/swap-erc20/build/contracts/SwapERC20.sol/SwapERC20.json'
-import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
-
 import { Protocol } from './protocol'
 import { result, error } from '../utils'
 
@@ -14,7 +13,7 @@ export class LastLookERC20 extends Protocol {
   public subscribers: WebSocket[] = []
 
   constructor(config: any) {
-    super(config, Protocols.LastLookERC20)
+    super(config, ProtocolIds.LastLookERC20)
     setInterval(() => {
       for (let idx in this.subscribers) {
         this.subscribers[idx].send(
@@ -57,21 +56,21 @@ export class LastLookERC20 extends Protocol {
         break
       case 'considerOrderERC20':
         console.log('Checking...', params)
-        const errors = await SwapERC20.getContract(
+        const swapErc20 = await SwapERC20.getContract(
           this.config.wallet.provider,
           this.config.chainId
-        ).check(this.config.wallet.address, ...orderERC20ToParams(params))
+        )
+        const errors = swapErc20.check(
+          this.config.wallet.address,
+          ...orderERC20ToParams(params)
+        )
         if (!errors.length) {
           const gasPrice = await this.config.wallet.getGasPrice()
           console.log(
             'No errors; taking...',
             `(gas price ${gasPrice / 10 ** 9})`
           )
-          new ethers.Contract(
-            swapDeploys[this.config.chainId],
-            SwapContract.abi,
-            this.config.wallet
-          )
+          swapErc20
             .swapLight(...orderERC20ToParams(params), { gasPrice })
             .then((tx: any) => {
               respond(result(id, true))

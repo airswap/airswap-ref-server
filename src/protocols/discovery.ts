@@ -1,13 +1,13 @@
 import { result } from '../utils'
 import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
-import { Protocols } from '@airswap/constants'
+import { ProtocolIds } from '@airswap/utils'
 import { Protocol } from './protocol'
 
 export class Discovery extends Protocol {
   public protocols: any
 
   constructor(config: any, protocols: any) {
-    super(config, Protocols.Discovery)
+    super(config, ProtocolIds.Discovery)
     this.protocols = protocols.slice()
   }
 

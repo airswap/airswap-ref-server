@@ -1,6 +1,6 @@
 import WebSocket from 'ws'
 import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
-import { Protocols } from '@airswap/constants'
+import { ProtocolIds } from '@airswap/utils'
 
 export default class WS {
   constructor(config: any, server: any, protocols: any) {
@@ -39,7 +39,7 @@ export default class WS {
           params: [
             [
               {
-                name: Protocols.LastLookERC20,
+                name: ProtocolIds.LastLookERC20,
                 version: '1.0.0',
                 params: {
                   senderWallet: config.wallet.address,

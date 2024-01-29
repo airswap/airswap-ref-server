@@ -4,9 +4,9 @@ import {
   createOrderERC20,
   createOrderERC20Signature,
   toAtomicString,
-  getCostFromPricing,
+  getPriceForAmount,
 } from '@airswap/utils'
-import { Protocols } from '@airswap/constants'
+import { ProtocolIds } from '@airswap/utils'
 
 import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 
@@ -15,7 +15,7 @@ import { decimals, result, error } from '../utils'
 
 export class RequestForQuoteERC20 extends Protocol {
   constructor(config: any) {
-    super(config, Protocols.RequestForQuoteERC20)
+    super(config, ProtocolIds.RequestForQuoteERC20)
   }
 
   async received(id: any, method: any, params: any, respond: any) {
@@ -49,7 +49,7 @@ export class RequestForQuoteERC20 extends Protocol {
         switch (method) {
           case 'getSignerSideOrderERC20':
             senderAmount = toDecimalString(params.senderAmount, senderDecimals)
-            signerAmount = getCostFromPricing(
+            signerAmount = getPriceForAmount(
               'buy',
               senderAmount,
               senderToken,
@@ -59,7 +59,7 @@ export class RequestForQuoteERC20 extends Protocol {
             break
           case 'getSenderSideOrderERC20':
             signerAmount = toDecimalString(params.signerAmount, signerDecimals)
-            senderAmount = getCostFromPricing(
+            senderAmount = getPriceForAmount(
               'sell',
               signerAmount,
               signerToken,
