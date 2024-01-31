@@ -1,6 +1,10 @@
 import { createClient } from 'redis'
 import { FullOrder, OrderFilter, Indexes, Direction } from '@airswap/utils'
 
+function tagsKey(token: string) {
+  return `tags:${token.toLowerCase()}`
+}
+
 function tokenKey(token: string, id: string) {
   return `ordersByToken:${token.toLowerCase()}:${id}`
 }
@@ -50,8 +54,19 @@ export default class Redis {
       '$',
       { nonce: order.nonce, signerWallet: order.signer.wallet.toLowerCase() }
     )
-
+    if (tags.length) {
+      await this.client.sAdd(tagsKey(order.signer.token), tags)
+    }
     return true
+  }
+
+  async tags(
+    token: string
+  ) {
+    if (!this.client.isOpen) {
+      await this.client.connect()
+    }
+    return (await this.client.sMembers(token)) || []
   }
 
   async read(
