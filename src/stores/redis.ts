@@ -66,7 +66,7 @@ export default class Redis {
     if (!this.client.isOpen) {
       await this.client.connect()
     }
-    return (await this.client.sMembers(token)) || []
+    return (await this.client.sMembers(`tags:${token}`)) || []
   }
 
   async read(

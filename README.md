@@ -14,7 +14,7 @@ Copy `.env.example` to `.env` and update values:
 
 ```
 PRIVATE_KEY= …
-CHAIN_ID=5
+CHAIN_ID=11155111
 ```
 
 Then start the server (with both RFQ and streaming):
@@ -28,7 +28,7 @@ Now you can query the server from the AirSwap CLI:
 ```
 $ yarn global add airswap
 $ airswap chain
-  → set to 5
+  → set to 11155111
 $ airswap account:import (or account:generate)
 $ airswap gas
   → set to 10
