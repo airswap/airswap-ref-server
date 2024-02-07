@@ -41,8 +41,8 @@ client.connect().then(async () => {
         type: SchemaFieldTypes.TEXT,
         AS: 'senderToken'
       },
-      '$.tags': {
-        type: SchemaFieldTypes.TEXT,
+      '$.tags.*': {
+        type: SchemaFieldTypes.TAG,
         AS: 'tags'
       },
     }, {

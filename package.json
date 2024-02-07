@@ -15,7 +15,7 @@
     "pretty:fix": "prettier --write \"./**/*.ts\""
   },
   "dependencies": {
-    "@airswap/libraries": "4.2.4",
+    "@airswap/libraries": "4.2.8",
     "axios": "^0.23.0",
     "bignumber.js": "^9.0.1",
     "body-parser": "^1.19.0",

@@ -32,6 +32,8 @@ export default class Redis {
     const existing = await this.client.json.get(
       tokenKey(order.signer.token, order.signer.id)
     )
+
+    // Delete existing order if found.
     if (existing) {
       const existingOrder = await this.client.json.get(
         signerKey(existing.signerWallet, existing.nonce)
@@ -44,16 +46,21 @@ export default class Redis {
       )
     }
 
+    // Set order by signer wallet and nonce.
     await this.client.json.set(
       signerKey(order.signer.wallet, order.nonce),
       '$',
-      { ...order, tags: tags.join(' ') }
+      { ...order, tags: tags || [] }
     )
+
+    // Set unique by signer token and signer id.
     await this.client.json.set(
       tokenKey(order.signer.token, order.signer.id),
       '$',
       { nonce: order.nonce, signerWallet: order.signer.wallet.toLowerCase() }
     )
+
+    // Add tags to set for the signer token.
     if (tags.length) {
       await this.client.sAdd(tagsKey(order.signer.token), tags)
     }
@@ -66,7 +73,7 @@ export default class Redis {
     if (!this.client.isOpen) {
       await this.client.connect()
     }
-    return (await this.client.sMembers(`tags:${token}`)) || []
+    return (await this.client.sMembers(tagsKey(token))) || []
   }
 
   async read(
@@ -81,11 +88,11 @@ export default class Redis {
     }
 
     const args = []
-    if (filter.senderToken) args.push(`@senderToken:(${filter.senderToken})`)
-    if (filter.signerToken) args.push(`@signerToken:(${filter.signerToken})`)
-    if (filter.signerId) args.push(`@signerId:(${filter.signerId})`)
-    if (filter.signerWallet) args.push(`@signerWallet:(${filter.signerWallet})`)
-    if (filter.tags?.length) args.push(`@tags:(${filter.tags.join(' ')})`)
+    if (filter.senderToken) args.push(`@senderToken:${filter.senderToken}`)
+    if (filter.signerToken) args.push(`@signerToken:${filter.signerToken}`)
+    if (filter.signerId) args.push(`@signerId:${filter.signerId}`)
+    if (filter.signerWallet) args.push(`@signerWallet:${filter.signerWallet}`)
+    if (filter.tags?.length) args.push(`@tags:{${filter.tags.join('|')}}`)
 
     const { total, documents } = await this.client.ft.search(
       'index:ordersBySigner',
