@@ -13,6 +13,10 @@ function signerKey(signer: string, nonce: string) {
   return `ordersBySigner:${signer.toLowerCase()}:${nonce}`
 }
 
+function cleanTags(tags: string[]) {
+  return tags.map(tag => tag.replace(/\:/g, '\\:').replace(/\=/g, '\\=').replace(/\|/g, '\\|'))
+}
+
 const DEFAULT_LIMIT = 10
 
 export default class Redis {
@@ -92,7 +96,7 @@ export default class Redis {
     if (filter.signerToken) args.push(`@signerToken:${filter.signerToken}`)
     if (filter.signerId) args.push(`@signerId:${filter.signerId}`)
     if (filter.signerWallet) args.push(`@signerWallet:${filter.signerWallet}`)
-    if (filter.tags?.length) args.push(`@tags:{${filter.tags.join('|')}}`)
+    if (filter.tags?.length) args.push(`@tags:{${cleanTags(filter.tags).join('|')}}`)
 
     const { total, documents } = await this.client.ft.search(
       'index:ordersBySigner',
