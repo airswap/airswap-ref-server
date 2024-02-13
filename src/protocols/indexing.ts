@@ -44,13 +44,13 @@ export class Indexing extends Protocol {
       case 'getOrders':
         const filter = params[0]
         try {
-          const { documents, total } = await this.store.read.apply(
+          const { orders, total } = await this.store.read.apply(
             this.store,
             params
           )
           respond(
             result(id, {
-              orders: documents.map((order: FullOrder) => order),
+              orders,
               offset: filter.offset,
               total: total,
             })
