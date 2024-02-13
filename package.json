@@ -1,5 +1,5 @@
 {
-  "name": "airswap-maker",
+  "name": "airswap-ref-server",
   "version": "4.0.0",
   "private": true,
   "main": "api/index.js",
@@ -15,7 +15,8 @@
     "pretty:fix": "prettier --write \"./**/*.ts\""
   },
   "dependencies": {
-    "@airswap/libraries": "4.2.8",
+    "@airswap/libraries": "4.2.9",
+    "@airswap/stores": "4.2.0",
     "axios": "^0.23.0",
     "bignumber.js": "^9.0.1",
     "body-parser": "^1.19.0",

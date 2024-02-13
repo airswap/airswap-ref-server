@@ -13,7 +13,7 @@ import {
 
 import HTTP from './servers/http'
 import WS from './servers/ws'
-import Redis from './stores/redis'
+import { Redis } from '@airswap/stores'
 
 import { Levels } from './levels'
 import { getNodeURL } from './utils'

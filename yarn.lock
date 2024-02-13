@@ -23,10 +23,10 @@
   dependencies:
     get-parameter-names "^0.3.0"
 
-"@airswap/libraries@4.2.8":
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/@airswap/libraries/-/libraries-4.2.8.tgz#d5017949cf35776d8f8995235e7d7e6a7b94c59a"
-  integrity sha512-jPfXmAd5cU1L8S3RpZSi9HNQ7C7j08DMsZr9Qkt5ZfMTi4opigkvF4orAscTfd3xm/q2g5zhNc6kdQbF5vIeWQ==
+"@airswap/libraries@4.2.9":
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/@airswap/libraries/-/libraries-4.2.9.tgz#8f4312e9e5a9387edfe566b397e862d0fbad6ec3"
+  integrity sha512-Qav6rQOpzRPZIDLhj7Pn9HsSAhZLI+LE1hjPzY/CbEKb4HmFV8g4R9CsKVSGZeX8qhWk4B/7jAftW4jIrzsRsg==
   dependencies:
     "@airswap/batch-call" "4.2.1"
     "@airswap/jsonrpc-client-websocket" "0.0.1"
@@ -35,7 +35,7 @@
     "@airswap/staking" "4.2.1"
     "@airswap/swap" "4.2.1"
     "@airswap/swap-erc20" "4.2.1"
-    "@airswap/utils" "4.2.6"
+    "@airswap/utils" "4.2.7"
     "@airswap/wrapper" "4.2.1"
     browser-or-node "^2.1.1"
     ethers "^5.6.9"
@@ -64,6 +64,14 @@
   dependencies:
     "@openzeppelin/contracts" "^4.8.3"
 
+"@airswap/stores@4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@airswap/stores/-/stores-4.2.0.tgz#8eafcdc7ef02997a3ef147f2c2c74ac5d5b178d4"
+  integrity sha512-kDYXmYFB5OZrlRAXWFHXcXGM1jSxs/tBTZznk206ypgMOGi1u4gej0KB/KpWLkbpffP5pxmEH6ggCVmVpb9+HA==
+  dependencies:
+    "@airswap/utils" "4.2.7"
+    redis "^4.6.13"
+
 "@airswap/swap-erc20@4.2.1":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@airswap/swap-erc20/-/swap-erc20-4.2.1.tgz#7d00273738a70ce6d65bb6f72238d73c2ebc1f7e"
@@ -78,10 +86,10 @@
   dependencies:
     "@openzeppelin/contracts" "^4.8.3"
 
-"@airswap/utils@4.2.6":
-  version "4.2.6"
-  resolved "https://registry.yarnpkg.com/@airswap/utils/-/utils-4.2.6.tgz#9c448b704cd96658b46902f77bdb20377f03f08f"
-  integrity sha512-IdN8sFAcf2NmiGx6L7nBMA3jdpBIIskGGcxx75Yt1wthEcyhDijMRRJRttD9aaGPPU6MDdXOXoeEBF/ApeYM8g==
+"@airswap/utils@4.2.7":
+  version "4.2.7"
+  resolved "https://registry.yarnpkg.com/@airswap/utils/-/utils-4.2.7.tgz#c19af4d2cc5c5fdeec9e38a4abc7d51f6dc4e82f"
+  integrity sha512-mJgz+JmwzZbzXDGbPGmeJQYKvvOWtm6OcjIP158zF50u1usKF5ZrT4HnFERcyy5rYt0DpwycZ87AbhUcAn3nfA==
   dependencies:
     "@metamask/eth-sig-util" "^5.0.2"
     "@openzeppelin/contracts" "^4.8.3"
@@ -939,6 +947,15 @@
   version "1.5.13"
   resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.5.13.tgz#78786218fc1632ee4b5f7d73b8d456c95880e086"
   integrity sha512-epkUM9D0Sdmt93/8Ozk43PNjLi36RZzG+d/T1Gdu5AI8jvghonTeLYV69WVWdilvFo+PYxbP0TZ0saMvr6nscQ==
+  dependencies:
+    cluster-key-slot "1.1.2"
+    generic-pool "3.9.0"
+    yallist "4.0.0"
+
+"@redis/client@1.5.14":
+  version "1.5.14"
+  resolved "https://registry.yarnpkg.com/@redis/client/-/client-1.5.14.tgz#1107893464d092f140d77c468b018a6ed306a180"
+  integrity sha512-YGn0GqsRBFUQxklhY7v562VMOP0DcmlrHHs3IV1mFE3cbxe31IITUkqhBcIhVSI/2JqtWAJXg5mjV4aU+zD0HA==
   dependencies:
     cluster-key-slot "1.1.2"
     generic-pool "3.9.0"
@@ -2473,6 +2490,18 @@ redis@^4.6.12:
   dependencies:
     "@redis/bloom" "1.2.0"
     "@redis/client" "1.5.13"
+    "@redis/graph" "1.1.1"
+    "@redis/json" "1.0.6"
+    "@redis/search" "1.1.6"
+    "@redis/time-series" "1.0.5"
+
+redis@^4.6.13:
+  version "4.6.13"
+  resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.13.tgz#e247267c5f3ba35ab8277b57343d3a56acb2f0a6"
+  integrity sha512-MHgkS4B+sPjCXpf+HfdetBwbRz6vCtsceTmw1pHNYJAsYxrfpOP6dz+piJWGos8wqG7qb3vj/Rrc5qOlmInUuA==
+  dependencies:
+    "@redis/bloom" "1.2.0"
+    "@redis/client" "1.5.14"
     "@redis/graph" "1.1.1"
     "@redis/json" "1.0.6"
     "@redis/search" "1.1.6"
