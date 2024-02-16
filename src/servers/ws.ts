@@ -3,15 +3,15 @@ import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 import { ProtocolIds } from '@airswap/utils'
 
 export default class WS {
-  constructor(config: any, server: any, protocols: any) {
+  public constructor(config: any, server: any, protocols: any) {
     const wss = new WebSocket.Server({ server })
 
     wss.on('connection', (ws: any, req: any) => {
       console.log('Connection', req.socket.remoteAddress)
       ws.on('message', async (message: any) => {
         try {
-          let { id, method, params } = JSON.parse(message)
-          for (let idx in protocols) {
+          const { id, method, params } = JSON.parse(message)
+          for (const idx in protocols) {
             protocols[idx].received(
               id,
               method,
@@ -28,8 +28,10 @@ export default class WS {
         }
       })
       ws.on('close', () => {
-        for (let idx in protocols) {
-          protocols[idx].closed(ws)
+        for (const idx in protocols) {
+          if (typeof protocols[idx].closed === 'function') {
+            protocols[idx].closed(ws)
+          }
         }
       })
       ws.send(

@@ -6,21 +6,22 @@ import { Protocol } from './protocol'
 export class Discovery extends Protocol {
   public protocols: any
 
-  constructor(config: any, protocols: any) {
+  public constructor(config: any, protocols: any) {
     super(config, ProtocolIds.Discovery)
     this.protocols = protocols.slice()
   }
 
-  async received(id: any, method: any, params: any, respond: any) {
+  public async received(id: any, method: any, params: any, respond: any) {
+    let res
     switch (method) {
       case 'getProtocols':
-        const res = [
+        res = [
           {
             interfaceId: this.interfaceId,
             params: {},
           },
         ]
-        for (let idx in this.protocols) {
+        for (const idx in this.protocols) {
           res.push({
             interfaceId: this.protocols[idx].interfaceId,
             params: {

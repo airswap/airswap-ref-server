@@ -8,22 +8,20 @@ import {
 } from '@airswap/utils'
 import { ProtocolIds } from '@airswap/utils'
 
-import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
-
 import { Protocol } from './protocol'
 import { decimals, result, error } from '../utils'
 
 export class RequestForQuoteERC20 extends Protocol {
-  constructor(config: any) {
+  public constructor(config: any) {
     super(config, ProtocolIds.RequestForQuoteERC20)
   }
 
-  async received(id: any, method: any, params: any, respond: any) {
+  public async received(id: any, method: any, params: any, respond: any) {
     if (
       method === 'getSignerSideOrderERC20' ||
       method === 'getSenderSideOrderERC20'
     ) {
-      let { signerToken, senderWallet, senderToken, swapContract } = params
+      const { signerToken, senderWallet, senderToken, swapContract } = params
       if (!signerToken || !senderToken || !senderWallet || !swapContract) {
         respond(error(id, -33604, 'Invalid request params'))
         return
@@ -32,9 +30,13 @@ export class RequestForQuoteERC20 extends Protocol {
         respond(error(id, -33601, 'Not serving chain'))
         return
       }
-      if (swapContract !== this.config.swapContract) {
+      if (swapContract !== this.config.swapContract.address) {
         respond(
-          error(id, -33604, `Using swap contract ${this.config.swapContract}`)
+          error(
+            id,
+            -33604,
+            `Using swap contract ${this.config.swapContract.address}`
+          )
         )
         return
       }
@@ -91,7 +93,7 @@ export class RequestForQuoteERC20 extends Protocol {
         const signature = await createOrderERC20Signature(
           order,
           `0x${process.env.PRIVATE_KEY}`,
-          this.config.swapContract,
+          this.config.swapContract.address,
           this.config.chainId,
           this.config.domainVersion,
           this.config.domainName

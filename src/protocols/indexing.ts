@@ -1,6 +1,5 @@
 import { BigNumber, Contract } from 'ethers'
 import { ProtocolIds } from '@airswap/utils'
-import { FullOrder } from '@airswap/utils'
 import * as SwapContract from '@airswap/swap/build/contracts/Swap.sol/Swap.json'
 import * as swapDeploys from '@airswap/swap/deploys.js'
 
@@ -10,7 +9,7 @@ import { Protocol } from './protocol'
 export class Indexing extends Protocol {
   private store: any
 
-  constructor(config: any, store: any) {
+  public constructor(config: any, store: any) {
     super(config, ProtocolIds.Indexing)
     this.store = store
     if (swapDeploys[String(config.chainId)]) {
@@ -24,11 +23,7 @@ export class Indexing extends Protocol {
     }
   }
 
-  async takenOrCancelled(nonce: BigNumber, signerWallet: string) {
-    await this.store.delete(signerWallet, nonce.toString())
-  }
-
-  async received(id: any, method: any, params: any, respond: any) {
+  public async received(id: any, method: any, params: any, respond: any) {
     switch (method) {
       case 'addOrder':
         try {
@@ -42,16 +37,12 @@ export class Indexing extends Protocol {
         respond(result(id, await this.store.tags(params[0])))
         break
       case 'getOrders':
-        const filter = params[0]
         try {
-          const { orders, total } = await this.store.read.apply(
-            this.store,
-            params
-          )
+          const { orders, total } = await this.store.read(...params)
           respond(
             result(id, {
               orders,
-              offset: filter.offset,
+              offset: params[1] || 0,
               total: total,
             })
           )
@@ -60,5 +51,9 @@ export class Indexing extends Protocol {
         }
         break
     }
+  }
+
+  private async takenOrCancelled(nonce: BigNumber, signerWallet: string) {
+    await this.store.delete(signerWallet, nonce.toString())
   }
 }

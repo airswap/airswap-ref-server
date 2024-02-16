@@ -2,6 +2,16 @@ import dotenv from 'dotenv'
 import * as ethers from 'ethers'
 import express from 'express'
 import { createServer } from 'http'
+import { SwapERC20 } from '@airswap/libraries'
+import { Redis } from '@airswap/stores'
+import {
+  chainNames,
+  DOMAIN_VERSION_SWAP_ERC20,
+  DOMAIN_NAME_SWAP_ERC20,
+} from '@airswap/utils'
+
+import HTTP from './servers/http'
+import WS from './servers/ws'
 
 import {
   Discovery,
@@ -11,19 +21,8 @@ import {
   Indexing,
 } from './protocols'
 
-import HTTP from './servers/http'
-import WS from './servers/ws'
-import { Redis } from '@airswap/stores'
-
 import { Levels } from './levels'
 import { getNodeURL } from './utils'
-import {
-  chainNames,
-  DOMAIN_VERSION_SWAP_ERC20,
-  DOMAIN_NAME_SWAP_ERC20,
-} from '@airswap/utils'
-
-import * as swapDeploys from '@airswap/swap-erc20/deploys.js'
 
 dotenv.config()
 
@@ -31,39 +30,36 @@ async function start() {
   const port = parseInt(String(process.env.PORT), 10) || 3000
   const chainId = Number(process.env.CHAIN_ID)
 
-  if (!swapDeploys[chainId]) {
+  if (!SwapERC20.getAddress(chainId)) {
     console.log(`Chain ${chainId} not supported; update process.env.CHAIN_ID`)
     return
   }
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    getNodeURL(chainId, String(process.env.INFURA_API_KEY || ''))
-  )
   const rpcUrl = getNodeURL(chainId, String(process.env.INFURA_API_KEY || ''))
   if (!rpcUrl) {
     console.error(`No rpc url available for chainId ${chainId}`)
     return
   }
-  console.log('Connecting to rpc', rpcUrl)
+  console.log(`Using ${chainNames[chainId]} RPC @`, rpcUrl)
+  const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
   await provider.getNetwork()
 
-  const wallet = new ethers.Wallet(String(process.env.PRIVATE_KEY), provider)
-  console.log('Loaded signer', wallet.address)
-
-  if (!swapDeploys[chainId]) {
-    console.error(`No swap-erc20 contract available for chainId ${chainId}`)
-    return
+  if (process.env.REDISCLOUD_URL) {
+    console.log('Using Redis @', process.env.REDISCLOUD_URL)
   }
 
+  const wallet = new ethers.Wallet(String(process.env.PRIVATE_KEY), provider)
+  console.log('\nLoaded signer', wallet.address)
+
   console.log(
-    `\nNow serving ${chainNames[chainId]} (Swap: ${swapDeploys[chainId]}, Name: ${DOMAIN_NAME_SWAP_ERC20}, Version: ${DOMAIN_VERSION_SWAP_ERC20})\n`
+    `\nNow serving ${chainNames[chainId]} (Swap: ${SwapERC20.getAddress(chainId)}, Name: ${DOMAIN_NAME_SWAP_ERC20}, Version: ${DOMAIN_VERSION_SWAP_ERC20})\n`
   )
 
   const config = {
     levels: (Levels as any)[chainId],
     wallet,
     chainId,
-    swapContract: swapDeploys[chainId],
+    swapContract: SwapERC20.getContract(wallet, chainId),
     domainName: DOMAIN_NAME_SWAP_ERC20,
     domainVersion: DOMAIN_VERSION_SWAP_ERC20,
     confirmations: String(process.env.CONFIRMATIONS || '2'),
@@ -83,11 +79,12 @@ async function start() {
   new HTTP(config, app, protocols), new WS(config, server, protocols)
   server.listen(port)
 
-  console.log(`Listening on port ${port} (HTTP, WS)`)
+  console.log(`Listening on port ${port} (HTTP, WS). Protocols:`)
 
-  for (let idx in protocols) {
+  for (const idx in protocols) {
     console.log(`· ${protocols[idx].toString()}`)
   }
+  console.log()
 }
 
 start()

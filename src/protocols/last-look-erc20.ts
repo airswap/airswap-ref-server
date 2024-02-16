@@ -5,17 +5,16 @@ import {
   ProtocolIds,
   explorerUrls,
 } from '@airswap/utils'
-import { SwapERC20 } from '@airswap/libraries'
 import { Protocol } from './protocol'
 import { result, error } from '../utils'
 
 export class LastLookERC20 extends Protocol {
   public subscribers: WebSocket[] = []
 
-  constructor(config: any) {
+  public constructor(config: any) {
     super(config, ProtocolIds.LastLookERC20)
     setInterval(() => {
-      for (let idx in this.subscribers) {
+      for (const idx in this.subscribers) {
         this.subscribers[idx].send(
           JSON.stringify({
             jsonrpc: '2.0',
@@ -27,12 +26,12 @@ export class LastLookERC20 extends Protocol {
     }, 1000)
   }
 
-  unsubscribe(subscriber: WebSocket) {
+  public unsubscribe(subscriber: WebSocket) {
     const idx = this.subscribers.findIndex((ws: WebSocket) => ws === subscriber)
     this.subscribers.splice(idx, 1)
   }
 
-  async received(
+  public async received(
     id: any,
     method: any,
     params: any,
@@ -55,44 +54,39 @@ export class LastLookERC20 extends Protocol {
         respond(result(id, true))
         break
       case 'considerOrderERC20':
-        console.log('Checking...', params)
-        const swapErc20 = await SwapERC20.getContract(
-          this.config.wallet.provider,
-          this.config.chainId
-        )
-        const errors = swapErc20.check(
-          this.config.wallet.address,
-          ...orderERC20ToParams(params)
-        )
-        if (!errors.length) {
-          const gasPrice = await this.config.wallet.getGasPrice()
-          console.log(
-            'No errors; taking...',
-            `(gas price ${gasPrice / 10 ** 9})`
-          )
-          swapErc20
-            .swapLight(...orderERC20ToParams(params), { gasPrice })
-            .then((tx: any) => {
-              respond(result(id, true))
+        this.config.swapContract
+          .check(this.config.wallet.address, ...orderERC20ToParams(params))
+          .then(async (errors: string[]) => {
+            if (!errors.length) {
+              const gasPrice = await this.config.wallet.getGasPrice()
               console.log(
-                'Submitted...',
-                `${explorerUrls[tx.chainId]}/tx/${tx.hash}`
+                'No errors; taking...',
+                `(gas price ${gasPrice / 10 ** 9})`
               )
-              tx.wait(this.config.confirmations).then(() => {
-                console.log(
-                  'Mined ✨',
-                  `${explorerUrls[tx.chainId]}/tx/${tx.hash}`
-                )
-              })
-            })
-            .catch((error: any) => {
-              console.log(error.message)
-              respond(error(id, -32603, error.message))
-            })
-        } else {
-          console.log('Errors...', parseCheckResult(errors))
-          respond(error(id, -33604, errors))
-        }
+              this.config.swapContract
+                .swapLight(...orderERC20ToParams(params), { gasPrice })
+                .then((tx: any) => {
+                  respond(result(id, true))
+                  console.log(
+                    'Submitted...',
+                    `${explorerUrls[tx.chainId]}/tx/${tx.hash}`
+                  )
+                  tx.wait(this.config.confirmations).then(() => {
+                    console.log(
+                      'Mined ✨',
+                      `${explorerUrls[tx.chainId]}/tx/${tx.hash}`
+                    )
+                  })
+                })
+                .catch((error: any) => {
+                  console.log(error.message)
+                  respond(error(id, -32603, error.message))
+                })
+            } else {
+              console.log('Errors...', parseCheckResult(errors))
+              respond(error(id, -33604, errors))
+            }
+          })
     }
   }
 }
