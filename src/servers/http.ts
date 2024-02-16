@@ -20,7 +20,7 @@ const cors = initMiddleware(
 )
 
 export default class HTTP {
-  constructor(config: any, app: any, protocols: any) {
+  public constructor(config: any, app: any, protocols: any) {
     app.use(bodyParser.json())
     app.options('*', async (req: any, res: any) => {
       await cors(req, res)
@@ -47,7 +47,7 @@ export default class HTTP {
 
     app.post('*', async (req: any, res: any) => {
       await cors(req, res)
-      for (let idx in protocols) {
+      for (const idx in protocols) {
         protocols[idx].received(
           req.body.id,
           req.body.method,

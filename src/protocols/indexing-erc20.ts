@@ -7,11 +7,11 @@ import { Protocol } from './protocol'
 export class IndexingERC20 extends Protocol {
   public orders: OrderERC20[] = []
 
-  constructor(config: any) {
+  public constructor(config: any) {
     super(config, ProtocolIds.IndexingERC20)
   }
 
-  async received(id: any, method: any, params: any, respond: any) {
+  public async received(id: any, method: any, params: any, respond: any) {
     switch (method) {
       case 'addOrderERC20':
         this.orders.push(params)
