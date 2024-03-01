@@ -35,6 +35,9 @@ export default class HTTP {
         JSON.stringify(
           {
             chainId: config.chainId,
+            swapContract: config.swapContract.address,
+            domainName: config.domainName,
+            domainVersion: config.domainVersion,
             wallet: config.wallet.address,
             protocols: protocols.map((protocol: any) => protocol.toString()),
             pricing: config.levels,
