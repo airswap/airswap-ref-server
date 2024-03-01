@@ -1,6 +1,20 @@
 export const Levels = {
   '1': [
     {
+      baseToken: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      quoteToken: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+      minimum: '0.00005',
+      bid: [['1000', '0.0005']],
+      ask: [['1000', '0.0005']],
+    },
+    {
+      baseToken: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+      quoteToken: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      minimum: '0.1',
+      bid: [['1000', '0.0005']],
+      ask: [['1000', '0.0005']],
+    },
+    {
       baseToken: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       quoteToken: '0xdac17f958d2ee523a2206206994597c13d831ec7',
       minimum: '0.00005',
