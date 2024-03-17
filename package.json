@@ -14,8 +14,8 @@
     "prettier": "prettier --write \"./**/*.ts\""
   },
   "dependencies": {
-    "@airswap/libraries": "4.3.0",
-    "@airswap/stores": "4.3.0",
+    "@airswap/libraries": "4.3.4",
+    "@airswap/stores": "4.3.2",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.4",
