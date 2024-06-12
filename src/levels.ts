@@ -61,6 +61,22 @@ export const Levels = {
       ask: [['100', '1']],
     },
   ],
+  '59144': [
+    {
+      baseToken: '0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f',
+      quoteToken: '0x176211869ca2b568f2a7d4ee941e073a821ee1ff',
+      minimum: '1',
+      bid: [['1000', '0.0005']],
+      ask: [['1000', '0.0005']],
+    },
+    {
+      baseToken: '0x176211869ca2b568f2a7d4ee941e073a821ee1ff',
+      quoteToken: '0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f',
+      minimum: '1',
+      bid: [['1000', '0.0005']],
+      ask: [['1000', '0.0005']],
+    },
+  ],
   '11155111': [
     {
       baseToken: '0x20aaebad8c7c6ffb6fdaa5a622c399561562beea',

@@ -7,6 +7,7 @@ export const decimals: any = {
   '0x1990bc6dfe2ef605bfc08f5a23564db75642ad73': 6,
   '0xdac17f958d2ee523a2206206994597c13d831ec7': 6,
   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': 6,
+  '0x176211869ca2b568f2a7d4ee941e073a821ee1ff': 6
 }
 
 export function getNodeURL(chainId: number, INFURA_ID: string) {

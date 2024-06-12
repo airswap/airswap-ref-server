@@ -70,9 +70,9 @@ async function start() {
 
   const protocols = [
     new RequestForQuoteERC20(config),
-    new LastLookERC20(config),
-    new IndexingERC20(config),
-    new Indexing(config, new Redis(process.env.REDISCLOUD_URL)),
+//    new LastLookERC20(config),
+//    new IndexingERC20(config),
+//    new Indexing(config, new Redis(process.env.REDISCLOUD_URL)),
   ]
   protocols.push(new Discovery(config, protocols))
 
