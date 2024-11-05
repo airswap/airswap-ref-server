@@ -1,13 +1,13 @@
 {
-  "compilerOptions": {
-    "outDir": "api",
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "sourceMap": false,
-    "declaration": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true
-  },
-  "include": ["src/**/*"]
+	"compilerOptions": {
+		"outDir": "api",
+		"target": "ESNext",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"sourceMap": false,
+		"declaration": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true
+	},
+	"include": ["src/**/*"]
 }
