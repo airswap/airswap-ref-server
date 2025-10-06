@@ -116,5 +116,11 @@ export class RequestForQuoteERC20 extends Protocol {
 				respond(error(id, -33601, "Not serving pair"));
 			}
 		}
+
+		if (
+			method === "getAllPricingERC20"
+		) {
+			respond(result(id, this.config.levels));
+		}
 	}
 }
